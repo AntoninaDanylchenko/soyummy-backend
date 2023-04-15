@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const ingredientSchema = new mongoose.Schema({
+const ingredientSchema = new Schema({
   ttl: {
     type: String,
     required: true,
@@ -11,7 +11,7 @@ const ingredientSchema = new mongoose.Schema({
   },
   t: {
     type: String,
-    required: true,
+    default: "",
   },
   thb: {
     type: String,
@@ -19,6 +19,6 @@ const ingredientSchema = new mongoose.Schema({
   },
 });
 
-const Ingredient = mongoose.model("ingredient", ingredientSchema);
+const Ingredient = model("ingredient", ingredientSchema);
 
 module.exports = { Ingredient };
