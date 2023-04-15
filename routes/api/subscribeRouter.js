@@ -1,7 +1,7 @@
-const express = require("express");
+// const express = require("express");
 
-const router = express.Router();
+// const router = express.Router();
 
-router.route("/");
+// router.route("/");
 
-module.exports = { subscribeRouter: router };
+// module.exports = { subscribeRouter: router };

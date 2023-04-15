@@ -1,9 +1,9 @@
-const express = require("express");
+// const express = require("express");
 
-const router = express.Router();
+// const router = express.Router();
 
-router.route("/");
+// router.route("/");
 
-module.exports = {
-  shoppingListRouter: router,
-};
+// module.exports = {
+//   shoppingListRouter: router,
+// };

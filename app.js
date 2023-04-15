@@ -6,8 +6,8 @@ const logger = require("morgan");
 
 const { rootRoute } = require("./routes/api/index");
 
-const notFound = require("./middlewares/notFound");
-const errorHandler = require("./middlewares/errorHandler");
+const { notFound } = require("./middlewares/notFound");
+const { errorHandler } = require("./middlewares/errorHandler");
 
 const app = express();
 

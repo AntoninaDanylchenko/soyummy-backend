@@ -1,13 +1,13 @@
-const express = require("express");
+// const express = require("express");
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get("/category-list");
+// router.get("/category-list");
 
-router.get("/main-page");
+// router.get("/main-page");
 
-router.get("/:caregory");
+// router.get("/:caregory");
 
-router.get("/:id");
+// router.get("/:id");
 
-module.exports = { recipesRouter: router };
+// module.exports = { recipesRouter: router };
