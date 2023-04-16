@@ -7,9 +7,9 @@ let addFavorite = async (req, res, next) => {
     const user = req.user;
     const { recipeId } = req.body;
 
-    await User.findOneAndUpdate(
-        { _id: user._id },
-        { $addToSet: { favoriteRecipes: recipeId } }
+    await User.findOneAndUpdate(   // this is method MongoDB 
+        { _id: user._id },    // search condition
+        { $addToSet: { favoriteRecipes: recipeId } } //  in field favoriteRecipes add element recipeId 
     );
     res.status(201).json({ message: 'Added to favorite' });
 };
@@ -42,9 +42,9 @@ let deleteFavorite = async (req, res, next) => {
 
     await User.findOneAndUpdate(
         { _id: user._id },
-        { $addToSet: { favoriteRecipes: recipeId } }
+        { $pull: { favoriteRecipes: recipeId } }  // method pull works like delete
     );
-    res.status(201).json({ message: 'Added to favorite' });
+    res.status(204);
 };
 deleteFavorite = wrapper(deleteFavorite);
 
