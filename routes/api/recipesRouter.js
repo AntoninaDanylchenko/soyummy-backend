@@ -1,8 +1,10 @@
-// const express = require("express");
+const express = require("express");
 
-// const router = express.Router();
+const { getCategoryList } = require("../../controllers/recipes/categoryList");
 
-// router.get("/category-list");
+const router = express.Router();
+
+router.get("/category-list", getCategoryList);
 
 // router.get("/main-page");
 
@@ -10,4 +12,4 @@
 
 // router.get("/:id");
 
-// module.exports = { recipesRouter: router };
+module.exports = { recipesRouter: router };

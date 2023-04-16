@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const logger = require("morgan");
 
-const { rootRoute } = require("./routes/api/index");
+const { rootRouter } = require("./routes/api/index");
 
 const { notFound } = require("./middlewares/notFound");
 const { errorHandler } = require("./middlewares/errorHandler");
@@ -17,7 +17,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/", rootRoute);
+app.use("/", rootRouter);
 
 app.use(notFound);
 app.use(errorHandler);
