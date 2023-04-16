@@ -48,6 +48,9 @@ const recipeSchema = new Schema(
     youtube: {
       type: String,
     },
+    pictureUrl: {
+      type: String,
+    },
     tags: [String],
     // ingredients: [
     //   {
