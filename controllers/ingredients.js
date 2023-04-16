@@ -22,7 +22,9 @@ let ingredients = async (req, res, next) => {
   if (!query) {
     throw new HttpError(400, "Bad request ingredient");
   }
-  const filterIngredient = await Ingredient.find({ ttl: { $eq: `${query}` } });
+  const filterIngredient = await Ingredient.find({
+    ttl: { $regex: `${query}`, $options: "i" },
+  });
 
   if (!filterIngredient) {
     throw new HttpError(404, "Not found ingredient");
