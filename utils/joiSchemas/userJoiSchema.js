@@ -14,7 +14,7 @@ const joiRegisterSchema = Joi.object({
     })
     .required(),
   email: Joi.string().email().required(),
-  avatarURL: Joi.string().dataUri(),
+  avatarURL: Joi.string(),
 });
 
 const joiLoginSchema = Joi.object({
