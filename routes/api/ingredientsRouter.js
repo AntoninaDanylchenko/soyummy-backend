@@ -1,7 +1,13 @@
-// const express = require("express");
+const express = require("express");
 
-// const router = express.Router();
+const {
+  ingredientsList,
+  ingredients,
+} = require("../../controllers/ingredients");
 
-// router.route("/");
+const router = express.Router();
 
-// module.exports = { ingredientsRouter: router };
+router.get("/list", ingredientsList);
+router.get("/", ingredients);
+
+module.exports = { ingredientsRouter: router };
