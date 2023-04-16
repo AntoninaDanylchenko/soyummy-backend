@@ -1,15 +1,17 @@
-const express = require("express");
+const express = require('express');
 
-const { getCategoryList } = require("../../controllers/recipes/categoryList");
-const { getOneCategory } = require("../../controllers/recipes/getOneCategory");
+const { wrapper } = require('../../middlewares/wrapper');
+const { getCategoryList } = require('../../controllers/recipes/categoryList');
+const { getOneCategory } = require('../../controllers/recipes/getOneCategory');
+const { getAllRecipes } = require('../../controllers/recipes/mainPage');
 
 const router = express.Router();
 
-router.get("/category-list", getCategoryList);
+router.get('/category-list', getCategoryList);
 
-// router.get("/main-page");
+router.get('/main-page', wrapper(getAllRecipes));
 
-router.get("/:category", getOneCategory);
+router.get('/:category', getOneCategory);
 
 // router.get("/:id");
 
