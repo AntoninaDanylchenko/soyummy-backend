@@ -19,8 +19,14 @@ ingredientsList = wrapper(ingredientsList);
 let ingredients = async (req, res, next) => {
   const { query } = req.query;
 
+  if (!query) {
+    throw new HttpError(400, "Bad request ingredient");
+  }
   const filterIngredient = await Ingredient.find({ ttl: { $eq: `${query}` } });
 
+  if (!filterIngredient) {
+    throw new HttpError(404, "Not found ingredient");
+  }
   const result = await Recipe.find({
     ingredients: {
       $elemMatch: {
@@ -28,6 +34,11 @@ let ingredients = async (req, res, next) => {
       },
     },
   });
+
+  if (!result) {
+    throw new HttpError(404, "Not found recipe");
+  }
+
   res.status(200).json({ result });
 };
 
