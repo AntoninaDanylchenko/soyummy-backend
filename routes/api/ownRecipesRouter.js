@@ -1,5 +1,19 @@
-// const express = require("express");
+const express = require("express");
+const router = express.Router();
 
-// const router = express.Router();
+const {
+  getAllRecipesController,
+  createRecipeController,
+  deleteRecipeController,
+} = require("../../controllers/ownRecipes");
+const { validateBody } = require("../../middlewares/validateBody");
+const { recipeJoiSchema } = require("../../utils/joiSchemas/recipeJoiSchema");
 
-// module.exports = { ownRecipesRouter: router };
+router
+  .route("/ownRecipes")
+  .get(getAllRecipesController)
+  .post(validateBody(recipeJoiSchema), createRecipeController);
+
+router.route("/ownRecipes/:recipeId").delete(deleteRecipeController);
+
+module.exports = { ownRecipesRouter: router };

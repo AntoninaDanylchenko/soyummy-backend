@@ -49,16 +49,17 @@ const joiShoppingList = Joi.object({
     )
     .default([]),
 });
-const joiOwnRecipes = Joi.object({
-  ownRecipes: Joi.array().items(
-    Joi.string().custom(ObjectId.isValid, "Object Id Validation")
-  ),
-});
+
+// const joiOwnRecipes = Joi.object({
+//   ownRecipes: Joi.array().items(
+//     Joi.string().custom(ObjectId.isValid, "Object Id Validation")
+//   ),
+// });
 
 module.exports = {
   joiRegisterSchema,
   joiLoginSchema,
   joiFavoriteRecipes,
   joiShoppingList,
-  joiOwnRecipes,
+  // joiOwnRecipes,
 };
