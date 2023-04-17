@@ -1,10 +1,28 @@
-// const express = require("express");
-// const { singup, login, logout } = require("../../controllers/auth");
+const express = require("express");
+const { userSignup, userLogin, userLogout } = require("../../controllers/auth");
+const { validateBody } = require("../../middlewares/validateBody");
+const {
+  joiRegisterSchema,
+  joiLoginSchema,
+} = require("../../utils/joiSchemas/userJoiSchema");
+const { uploadCloud } = require("../../middlewares/uploadMiddleware");
 
-// const router = express.Router();
+const router = express.Router();
 
 // router.route("/singup").post(singup);
 // router.route("/login").post(login);
 // router.route("/logout").post(logout);
 
 // module.exports = { authRouter: router };
+
+router
+  .route("/signup")
+  .post(
+    validateBody(joiRegisterSchema),
+    uploadCloud.single("avatar"),
+    userSignup
+  );
+router.route("/login").post(validateBody(joiLoginSchema), userLogin);
+router.route("/logout").post(userLogout);
+
+module.exports = { authRouter: router };

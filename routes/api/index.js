@@ -1,6 +1,6 @@
 const express = require("express");
 
-// const { authRouter } = require("./authRouter");
+const { authRouter } = require("./authRouter");
 // const { subscribeRouter } = require("./subscribeRouter");
 const { recipesRouter } = require("./recipesRouter");
 // const { searchRouter } = require("./searchRouter");
@@ -12,7 +12,7 @@ const { ingredientsRouter } = require("./ingredientsRouter");
 
 const router = express.Router();
 
-// router.use("/auth", authRouter);
+router.use("/auth", authRouter);
 // router.use("/subscribe", subscribeRouter);
 router.use("/recipes", recipesRouter);
 // router.use("/search", searchRouter);
