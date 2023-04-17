@@ -1,14 +1,16 @@
-const express = require("express");
+const express = require('express');
 
-const { getCategoryList } = require("../../controllers/recipes/categoryList");
+const { getCategoryList } = require('../../controllers/recipes/categoryList');
+const { getOneCategory } = require('../../controllers/recipes/getOneCategory');
+const { getAllRecipes } = require('../../controllers/recipes/mainPage');
 
 const router = express.Router();
 
-router.get("/category-list", getCategoryList);
+router.get('/category-list', getCategoryList);
 
-// router.get("/main-page");
+router.get('/main-page', getAllRecipes);
 
-// router.get("/:caregory");
+router.get('/:category', getOneCategory);
 
 // router.get("/:id");
 
