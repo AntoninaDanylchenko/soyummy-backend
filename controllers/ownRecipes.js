@@ -37,9 +37,9 @@ let deleteRecipeController = async (req, res, next) => {
   const { recipeId } = req.params;
   const { _id: owner } = req.user;
 
-  if (!recipeId) throw new HttpError(404, "Not found");
+  const removed = await removeRecipe(recipeId, owner);
 
-  await removeRecipe(recipeId, owner);
+  if (!removed) throw new HttpError(404, "Not found");
 
   res.status(200).json({
     message: `Recipe with id:${recipeId} has been removed!`,

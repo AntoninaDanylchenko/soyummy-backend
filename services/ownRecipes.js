@@ -36,8 +36,8 @@ const createRecipe = async (
   });
 };
 
-const removeRecipe = async ({ _id }, owner) => {
-  return await Recipe.findOneAndRemove({ _id, owner });
+const removeRecipe = async (id, owner) => {
+  return await Recipe.findOneAndRemove({ _id: id, owner });
 };
 
 module.exports = {
