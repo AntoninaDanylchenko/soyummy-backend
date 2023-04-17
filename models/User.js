@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-// const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new Schema(
   {
@@ -22,7 +22,13 @@ const userSchema = new Schema(
         ref: "Recipe",
       },
     ],
-    favoriteRecipes: [String],
+    // favoriteRecipes: [String],
+    favoriteRecipes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Recipe",
+      },
+    ],
     shoppingList: {
       _id: false,
       type: [
@@ -39,13 +45,12 @@ const userSchema = new Schema(
       ],
       default: [],
     },
-    token: {
+    refresh_token: {
       type: String,
       default: null,
     },
     avatarURL: {
       type: String,
-      required: true,
     },
     verify: {
       type: Boolean,
@@ -58,23 +63,20 @@ const userSchema = new Schema(
   }
 );
 
-// userSchema.methods.isPasswordCorrect = async function (password) {
-//   const user = this;
-//   console.log("user", user);
-//   const isPasswordCorrect = await bcrypt.compare(password, user.password);
+userSchema.methods.isPasswordCorrect = async function (password) {
+  const user = this;
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  return isPasswordCorrect;
+};
 
-//   return isPasswordCorrect;
-// };
-
-// // hooks - перед events
-// userSchema.pre("save", async function (next) {
-//   const user = this;
-//   if (!user.isModified("password")) {
-//     return next();
-//   }
-//   user.password = await bcrypt.hash(user.password, 12);
-//   next();
-// });
+userSchema.pre("save", async function (next) {
+  const user = this;
+  if (!user.isModified("password")) {
+    return next();
+  }
+  user.password = await bcrypt.hash(user.password, 12);
+  next();
+});
 
 const User = model("user", userSchema);
 

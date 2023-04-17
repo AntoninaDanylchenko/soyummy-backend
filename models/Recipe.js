@@ -52,12 +52,10 @@ const recipeSchema = new Schema(
       type: String,
     },
     tags: [String],
-    // ingredients: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Ingredient",
-    //   },
-    // ],
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     ingredients: {
       type: [
         {
