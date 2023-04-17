@@ -1,7 +1,9 @@
-// const express = require("express");
+const express = require('express');
 
-// const router = express.Router();
+const { getPopularRecipes } = require('../../controllers/popularRecipes');
 
-// router.route("/");
+const router = express.Router();
 
-// module.exports = { popularRecipeRouter: router };
+router.get('/', getPopularRecipes);
+
+module.exports = { popularRecipeRouter: router };
