@@ -26,7 +26,7 @@ let getFavorite = async (req, res, next) => {
             "$in": listFav, // id of recipe must be in listFav
         }
     }, // and return only fields below
-        { title: 1, description: 1, pictureUrl: 1, time: 1 })
+        { title: 1, description: 1, preview: 1, time: 1 })
 
     res.status(200).json({
         data: fav,

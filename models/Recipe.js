@@ -48,9 +48,6 @@ const recipeSchema = new Schema(
     youtube: {
       type: String,
     },
-    pictureUrl: {
-      type: String,
-    },
     tags: [String],
     owner: {
       type: Schema.Types.ObjectId,
