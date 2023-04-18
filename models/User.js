@@ -30,7 +30,7 @@ const userSchema = new Schema(
       },
     ],
     shoppingList: {
-      _id: false,
+      _id: true,
       type: [
         {
           ingredientId: {
