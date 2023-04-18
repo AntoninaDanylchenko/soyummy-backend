@@ -22,26 +22,32 @@ let ingredients = async (req, res, next) => {
   if (!query) {
     throw new HttpError(400, "Bad request ingredient");
   }
-  const filterIngredient = await Ingredient.find({
-    ttl: { $regex: `${query}`, $options: "i" },
-  });
-
-  if (!filterIngredient) {
-    throw new HttpError(404, "Not found ingredient");
+  let filterIngredient;
+  try {
+    filterIngredient = await Ingredient.find({
+      ttl: { $regex: `${query}`, $options: "i" },
+      // ttl: { $eq: `${query}` },
+    });
+  } catch (error) {
+    throw new HttpError(404, `Not found ingredient: ${error.message}`);
   }
-  const result = await Recipe.find({
-    ingredients: {
-      $elemMatch: {
-        id: filterIngredient[0]._id,
+  try {
+    const result = await Recipe.find({
+      ingredients: {
+        $elemMatch: {
+          id: filterIngredient[0]._id,
+        },
       },
-    },
-  });
+    });
 
-  if (!result) {
-    throw new HttpError(404, "Not found recipe");
+    if (!result) {
+      throw new HttpError(404, "Not found recipe");
+    }
+
+    res.status(200).json({ result });
+  } catch (error) {
+    throw new HttpError(404, `Not found recipe: ${error.message}`);
   }
-
-  res.status(200).json({ result });
 };
 
 ingredients = wrapper(ingredients);
