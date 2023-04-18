@@ -9,12 +9,6 @@ const { uploadCloud } = require("../../middlewares/uploadMiddleware");
 
 const router = express.Router();
 
-// router.route("/singup").post(singup);
-// router.route("/login").post(login);
-// router.route("/logout").post(logout);
-
-// module.exports = { authRouter: router };
-
 router
   .route("/signup")
   .post(
