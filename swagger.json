@@ -18,12 +18,106 @@
       "description": "Authorization endpoints"
     },
     {
+      "name": "Subscribe",
+      "description": "Subscribtion email"
+    },
+    {
       "name": "Recipes",
-      "description": "Authorization endpoints"
+      "description": "Everything about Recipes"
+    },
+    {
+      "name": "Ingredients",
+      "description": "Everything about Ingredients"
+    },
+    {
+      "name": "Own recipe",
+      "description": "Everything about your recipes"
+    },
+    {
+      "name": "Shopping list",
+      "description": "Everything about your shopping list"
     }
   ],
   "paths": {
-    "/auth/register": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/logout": {
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
@@ -88,13 +182,29 @@
     "/recipes/:category": {
       "get": {
         "tags": ["Recipes"],
-        "summary": "User registration",
+        "summary": "Receiving 8 recipes of the selected category",
         "parameters": [
           {
+            "name": "category",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Name of recipe`s category"
+            "description": "Name of category",
+            "example": "Beef"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Amount recipes on page"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Number of page"
           }
         ],
         "responses": {
@@ -127,6 +237,11 @@
             "type": "string",
             "description": "User's email",
             "format": "email"
+          },
+          "username": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Andrew"
           },
           "password": {
             "type": "string",
@@ -178,10 +293,99 @@
               "example": "45"
             },
             "recipesList": {
-              "type": "object"
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "String",
+                  "description": "Recipe title"
+                },
+                "category": {
+                  "type": "String",
+                  "description": "Recipe category"
+                },
+                "area": {
+                  "type": "String",
+                  "description": "Recipe country"
+                },
+                "instructions": {
+                  "type": "String",
+                  "description": "Instruction of recipe"
+                },
+                "description": {
+                  "type": "String",
+                  "description": "Recipe description"
+                },
+                "thumb": {
+                  "type": "String",
+                  "description": "Recipe photo"
+                },
+                "preview": {
+                  "type": "String",
+                  "description": "Recipe photo preview"
+                },
+                "time": {
+                  "type": "String",
+                  "description": "Recipe preparation time"
+                },
+                "youtube": {
+                  "type": "String",
+                  "description": "Recipe cooking video"
+                },
+                "tags": {
+                  "type": "Array",
+                  "description": "Array of recipe tags"
+                },
+                "createdAt": "Recept created time",
+                "updatedAt": "Recept updated time",
+                "ingredients": {
+                  "type": [
+                    {
+                      "ingredientId": {
+                        "type": "Schema.Types.ObjectId",
+                        "description": "Ingredient's id"
+                      },
+                      "measure": {
+                        "type": "String",
+                        "description": "Ingredient's measure ibn recipe"
+                      }
+                    }
+                  ]
+                }
+              }
             }
-          },
-          "example": ["Beef", "Vegan"]
+          }
+        },
+        "example": {
+          "total": 43,
+          "recipesList": [
+            {
+              "_id": "640cd5ac2d9f",
+              "title": "Irish stew",
+              "category": "Beef",
+              "area": "Irish",
+              "instructions": "Heat the oven to 180C/350F/gas mark 4...",
+              "description": "A traditional Irish dish made with lamb...",
+              "thumb": "https://images/media/meals/sxxpst1468569714.jpg",
+              "preview": "https://res.cloudinary.com//image/kknfjaqupiqhufj5kspx.jpg",
+              "time": "160",
+              "youtube": "https://www.youtube.com/",
+              "tags": ["Stew", "Meat"],
+              "createdAt": "2023-03-11T19:25:33.240Z",
+              "updatedAt": "2023-04-14T20:02:28.085Z",
+              "ingredients": [
+                {
+                  "_id": "643e78d78a15223d43a979ba",
+                  "id": "640c2dd963a319ea671e3796",
+                  "measure": ["300g soaked overnight in water"]
+                },
+                {
+                  "_id": "643e78d78a15223d43a979bb",
+                  "id": "640c2dd963a319ea671e370c",
+                  "measure": ["2kg cut into 3cm cubes"]
+                }
+              ]
+            }
+          ]
         }
       }
     },
