@@ -1,6 +1,6 @@
-const { wrapper } = require("../../middlewares/wrapper");
-const { User } = require("../../models/User");
-const { HttpError } = require("../../utils/HttpError");
+const { wrapper } = require("../middlewares/wrapper");
+const { User } = require("../models/User");
+const { HttpError } = require("../utils/HttpError");
 
 let getInfoAboutUser = async (req, res, next) => {
   const { id } = req.user;
