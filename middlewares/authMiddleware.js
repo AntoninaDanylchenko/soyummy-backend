@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 const { User } = require("../models/User");
 const { HttpError } = require("../utils/HttpError");
 const { assignTokens } = require("../services/auth");
@@ -8,9 +9,9 @@ const { REFRESH_TOKEN_SECRET, ACCESS_TOKEN_SECRET } = process.env;
 const authMiddleware = async (req, res, next) => {
   let token;
   try {
-    const { authorization } = req.headers;
     // const [, headerToken] = req.headers["authorization"].split(" ");
-    const [, headerToken] = authorization.split(" ");
+    const [, headerToken] = req.headers.authorization.split(" ");
+
     token = headerToken;
   } catch (error) {
     return next(new HttpError(401, "Not authorized"));
