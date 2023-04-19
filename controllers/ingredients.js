@@ -26,12 +26,11 @@ let ingredients = async (req, res, next) => {
   let filterIngredient;
   try {
     filterIngredient = await Ingredient.find({
-      ttl: { $regex: `${query}`, $options: "i" },
+      ttl: { $regex: `${search}`, $options: "i" },
       // ttl: { $eq: `${query}` },
     });
   } catch (error) {
     throw new HttpError(404, `Not found ingredient: ${error.message}`);
-
   }
   try {
     const result = await Recipe.find({
