@@ -17,13 +17,13 @@ let ingredientsList = async (req, res, next) => {
 ingredientsList = wrapper(ingredientsList);
 
 let ingredients = async (req, res, next) => {
-  const { query } = req.query;
+  const { search } = req.query;
 
-  if (!query) {
+  if (!search) {
     throw new HttpError(400, "Bad request ingredient");
   }
   const filterIngredient = await Ingredient.find({
-    ttl: { $regex: `${query}`, $options: "i" },
+    ttl: { $regex: `${search}`, $options: "i" },
   });
 
   if (!filterIngredient) {
