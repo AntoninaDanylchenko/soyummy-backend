@@ -8,9 +8,9 @@ const { ingredientsRouter } = require("./ingredientsRouter");
 // const { ownRecipesRouter } = require("./ownRecipesRouter");
 
 const { favoriteRouter } = require("./favoriteRouter");
-const { popularRecipeRouter } = require('./popularRecipeRouter');
+const { popularRecipeRouter } = require("./popularRecipeRouter");
 
-// const { shoppingListRouter } = require("./shoppingListRouter");
+const { shoppingListRouter } = require("./shoppingListRouter");
 const { modalRouter } = require("./modalRouter");
 
 const router = express.Router();
@@ -23,9 +23,9 @@ router.use("/ingredients", ingredientsRouter);
 // router.use("/ownRecipes", ownRecipesRouter);
 
 router.use("/favorite", favoriteRouter);
-router.use('/popular-recipe', popularRecipeRouter);
+router.use("/popular-recipe", popularRecipeRouter);
 
-// router.use("/shopping-list", shoppingListRouter);
+router.use("/shopping-list", shoppingListRouter);
 router.use("/modal", modalRouter);
 
 module.exports = { rootRouter: router };

@@ -16,7 +16,7 @@ let getRecipeById = async (req, res, next) => {
   const recipe = await Recipe.findById(id);
 
   if (!recipe) {
-    throw new HttpError(400, "Recipe not found");
+    throw new HttpError(404, "Recipe not found");
   }
 
   res.status(200).json({ recipe });

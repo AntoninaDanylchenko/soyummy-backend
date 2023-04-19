@@ -17,11 +17,12 @@ let ingredientsList = async (req, res, next) => {
 ingredientsList = wrapper(ingredientsList);
 
 let ingredients = async (req, res, next) => {
-  const { query } = req.query;
+  const { search } = req.query;
 
-  if (!query) {
+  if (!search) {
     throw new HttpError(400, "Bad request ingredient");
   }
+
   let filterIngredient;
   try {
     filterIngredient = await Ingredient.find({
@@ -30,6 +31,7 @@ let ingredients = async (req, res, next) => {
     });
   } catch (error) {
     throw new HttpError(404, `Not found ingredient: ${error.message}`);
+
   }
   try {
     const result = await Recipe.find({
