@@ -84,9 +84,9 @@ userSignup = wrapper(userSignup);
 
 let userLogin = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(req.body);
+ 
   const user = await User.findOne({ email });
-  console.log("user", user);
+
   if (!user) {
     throw new HttpError(401, "Email or password is incorrect");
   }
@@ -94,13 +94,13 @@ let userLogin = async (req, res, next) => {
   // const isPasswordCorrect = await user.isPasswordCorrect({ password });
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
   // return isPasswordCorrect;
-  console.log("pass", isPasswordCorrect);
+
   if (!isPasswordCorrect) {
     throw new HttpError(401, "Email or password is incorrect");
   }
 
   const { accessToken, refreshToken } = assignTokens(user);
-  console.log("12334467");
+
   await User.findByIdAndUpdate(user._id, { refresh_token: refreshToken });
   user.password = undefined;
 
@@ -123,7 +123,7 @@ let userLogout = async (req, res, _) => {
   const { _id, refresh_token } = req.user;
   const user = await User.findOne({ refresh_token });
   // const user = await User.findById(_id);
-  console.log(user);
+ 
   if (!user) {
     throw new HttpError(401, "Not authorized");
   }
