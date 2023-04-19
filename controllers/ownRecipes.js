@@ -22,9 +22,14 @@ let getAllRecipesController = async (req, res, next) => {
 
 let createRecipeController = async (req, res, next) => {
   const { body } = req;
-  const { _id: owner } = req.user;
+  const { _id: owner, ownRecipes } = req.user;
 
-  await createRecipe(body, owner);
+  const created = await createRecipe(body, owner);
+
+  if (created) {
+    await ownRecipes.unshift(created);
+    await req.user.save();
+  }
 
   res.status(201).json({
     message: `New recipe has been created!`,
