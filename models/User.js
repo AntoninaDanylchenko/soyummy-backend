@@ -5,16 +5,16 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
+      required: [true, "Username is required"],
     },
     password: {
       type: String,
-      required: true,
-      // select: false,
+      required: [true, "Create your password!"],
     },
     email: {
       type: String,
       required: [true, "Email is required"],
+      unique: true,
     },
     ownRecipes: [
       {
@@ -30,7 +30,7 @@ const userSchema = new Schema(
       },
     ],
     shoppingList: {
-      _id: false,
+      _id: true,
       type: [
         {
           ingredientId: {
@@ -55,6 +55,10 @@ const userSchema = new Schema(
     verify: {
       type: Boolean,
       default: false,
+    },
+    subscription: {
+      type: String,
+      default: "",
     },
   },
   {
