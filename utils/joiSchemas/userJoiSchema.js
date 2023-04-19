@@ -10,7 +10,7 @@ const joiRegisterSchema = Joi.object({
     .pattern(passwordPattern)
     .messages({
       "string.pattern.base":
-        "Password should contain minimum eight characters, at least one letter and one number.",
+        "Password should contain minimum six characters, at least one letter and one number.",
     })
     .required(),
   email: Joi.string().email().required(),
@@ -28,7 +28,7 @@ const joiLoginSchema = Joi.object({
     .pattern(passwordPattern)
     .messages({
       "string.pattern.base":
-        "Password should contain minimum eight characters, at least one letter and one number.",
+        "Password should contain minimum six characters, at least one letter and one number.",
     })
     .required(),
 });

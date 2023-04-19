@@ -15,31 +15,31 @@ const recipeSchema = new Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Add title"],
     },
     category: {
       type: String,
-      required: true,
+      required: [true, "Add a category"],
     },
     area: {
       type: String,
-      required: true,
+      default: null,
     },
     instructions: {
       type: String,
-      required: true,
+      required: [true, "Write an instructions"],
     },
     description: {
       type: String,
-      required: true,
+      required: [true, "Add a short description to the recipe"],
     },
     thumb: {
       type: String,
-      required: true,
+      required: [true, "Add image of the dish"],
     },
     preview: {
       type: String,
-      required: true,
+      default: null,
     },
     time: {
       type: String,
@@ -47,6 +47,7 @@ const recipeSchema = new Schema(
     },
     youtube: {
       type: String,
+      default: null,
     },
     tags: [String],
     owner: {
