@@ -1,41 +1,41 @@
-const { errorHandler } = require("../middlewares/errorHandler");
-const { subscibeServis } = require("../services/subscribe");
-const {
-  subscribeValidate,
-} = require("../utils/joiSchemas/subscribeValidateShema");
+const subscribeSchema = require("../utils/joiSchemas/subscribeSchema");
 
-const subscribeController = async (req, res, next) => {
-  const reqValidate = subscribeValidate.validate(req.body);
-  const { email } = req.body;
-  if (!reqValidate.error) {
-    const res = await subscibeServis(email);
-    if (res) {
-      return res.status(200).json({
-        message: `succesfull subscribe to ${email}`,
-        code: 200,
-      });
-    } else {
-      throw errorHandler("Internal server error!");
-    }
+const sgMail = require("@sendgrid/mail");
+require("dotenv").config();
+
+const { SENDGRID_API_KEY } = process.env;
+
+sgMail.setApiKey(SENDGRID_API_KEY);
+
+const subscribeMail = async (req, res) => {
+  const { error } = subscribeSchema.validate(req.body);
+  if (error) {
+    return res.status(404).json({ message: error.message });
   }
+  const { email } = req.user;
+  const { putEmail } = req.body;
+  if (email !== putEmail) {
+    return res.status(404).json({
+      message: "Please input your email for which you are registered",
+    });
+  }
+  const emailForSend = {
+    to: email,
+    from: "soyummyadmin@op.pl",
+    subject: "Subscription info",
+    html: "<p>You subscribed to our news!</p>",
+  };
+
+  await sgMail
+    .send(emailForSend)
+    .then(() => console.log("Email send success"))
+    .catch((error) => {
+      console.log(error.message);
+      return res.status(404).json({ message: error });
+    });
+  res.status(200).json({
+    status: 200,
+    message: "success",
+  });
 };
-module.exports = { subscribeController };
-// const nodemailer = require("nodemailer")
-
-// const emailTransport = nodemailer.createTransport({
-//   host: process.env.EMAIL_MAILTRAP_HOST,
-//   port: process.env.EMAIL_MAILTRAP_PORT,
-//   auth: {
-//     user: process.env.EMAIL_MAILTRAP_USERNAME,
-//     pass: process.env.EMAIL_MAILTRAP_PASSWORD,
-//   },
-// });
-
-// const emailConfig = {
-//   from: "So Yummy APP admin <soyummyadmin@op.pl>",
-//   to: newUser.email,
-//   subject: "Hello from So Yummy APP!",
-//   text: "nice to meet you",
-// };
-
-// emailTransport.sendMail(emailConfig);
+module.exports = { subscribeMail };
