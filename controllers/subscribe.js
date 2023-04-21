@@ -4,11 +4,18 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 const path = require("path");
 const { convert } = require("html-to-text");
 const pug = require("pug");
+const { subscribeSchema } = require("../utils/joiSchemas/subscribeSchema");
+const { HttError } = require("../utils/HttpError");
 
-const sendMail = async ({ email }) => {
+const subsribeMail = async (req, res) => {
+  const { error } = subscribeSchema.validate(req.body);
+  if (error) {
+    throw new HttError();
+  }
   const html = pug.renderFile(
     path.join(__dirname, "..", "/", "template", "tplMail.pug")
   );
+  const email = req.user;
   const emailTpl = {
     to: email,
     from: SENGRID_EMAIL_FROM,
@@ -23,4 +30,4 @@ const sendMail = async ({ email }) => {
       console.log(error.message);
     });
 };
-module.exports = { sendMail };
+module.exports = { subsribeMail };
