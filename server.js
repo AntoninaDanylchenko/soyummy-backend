@@ -3,7 +3,7 @@ require("dotenv").config();
 const { app } = require("./app");
 const mongoose = require("mongoose");
 
-const { PORT = 5500, DB_URL } = process.env;
+const { PORT = 3000, DB_URL } = process.env;
 
 (async () => {
   try {
