@@ -31,12 +31,12 @@ const authMiddleware = async (req, res, next) => {
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       try {
-        jwt.verify(token, REFRESH_TOKEN_SECRET);
-        const { accessToken, refreshToken } = assignTokens(user);
-        await User.findByIdAndUpdate(user._id, { refresh_token: refreshToken });
-        res.status(200).json({ accessToken });
+        jwt.verify(token, REFRESH_TOKEN_SECRET); // якщо рефреш токен ОК
+        const { accessToken, refreshToken } = assignTokens(user); // викликаємо фнкцію яка створює нову пару токенів
+        await User.findByIdAndUpdate(user._id, { refresh_token: refreshToken }); // оновлюємо поле рефреш токена в базі даних
+        res.status(200).json({ accessToken }); // в респонсі повертаємо аксес
       } catch (error) {
-        if (error instanceof jwt.REFRESH_TOKEN_SECRET) {
+        if (error instanceof jwt.TokenExpiredError) {
           return next(new HttpError(401, "Token expired, please Login again."));
         }
         return next(new HttpError(401, "Invalid token"));
