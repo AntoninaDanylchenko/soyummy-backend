@@ -44,7 +44,11 @@ let deleteFavorite = async (req, res, next) => {
         { _id: user._id },
         { $pull: { favoriteRecipes: recipeId } }  // method pull works like delete
     );
-    res.status(204);
+
+    // user.favoriteRecipes = user.favoriteRecipes.filter((_id) => _id !== recipeId);
+    // await user.save();
+
+    res.status(204).json();
 };
 deleteFavorite = wrapper(deleteFavorite);
 
