@@ -46,7 +46,6 @@
 // userLogout = wrapper(userLogout);
 
 // module.exports = { userSignup, userLogin, userLogout };
-
 const gravatar = require("gravatar");
 // const path = require("path");
 require("dotenv").config();
@@ -84,7 +83,7 @@ userSignup = wrapper(userSignup);
 
 let userLogin = async (req, res, next) => {
   const { email, password } = req.body;
- 
+
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -123,7 +122,7 @@ let userLogout = async (req, res, _) => {
   const { _id, refresh_token } = req.user;
   const user = await User.findOne({ refresh_token });
   // const user = await User.findById(_id);
- 
+
   if (!user) {
     throw new HttpError(401, "Not authorized");
   }
