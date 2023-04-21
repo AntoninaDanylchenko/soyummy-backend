@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
 const subscribeSchema = Joi.object({
-  inputEmail: Joi.string().min(3).required().email(),
+  email: Joi.string().email().required(),
 });
 module.exports = { subscribeSchema };
