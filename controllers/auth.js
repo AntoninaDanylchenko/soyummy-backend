@@ -46,7 +46,9 @@
 // userLogout = wrapper(userLogout);
 
 // module.exports = { userSignup, userLogin, userLogout };
-
+// +++++++++++++subscribe+++++++++++
+const { sendMail } = require("../services/subscribe");
+// +++++++++++++subscribe+++++++++++
 const gravatar = require("gravatar");
 // const path = require("path");
 require("dotenv").config();
@@ -77,6 +79,10 @@ let userSignup = async (req, res, next) => {
     avatarURL,
     // refresh_token: accessToken,
   });
+  // +++++++++++++subscribe+++++++++++
+  await sendMail(newUser);
+
+  // +++++++++++++subscribe+++++++++++
   newUser.password = undefined;
   res.status(201).json(newUser);
 };
