@@ -1,18 +1,20 @@
 const { wrapper } = require("../middlewares/wrapper");
-const { User } = require("../models/User");
-const { HttpError } = require("../utils/HttpError");
+const { convertMs } = require("../utils/convertMs");
 
 let getInfoAboutUser = async (req, res, next) => {
-  const { id } = req.user;
-  const user = await User.findById(id);
-  if (!user) {
-    throw new HttpError(401, "Not authorized");
-  }
-  const quantyOwnRecipes = user.ownRecipes.lenght;
-  const quantyFavoriteRecipes = user.favoriteRecipes.lenght;
-  // user.createdAt;
+  const user = req.user;
 
-  res.status(200).json({ quantyOwnRecipes, quantyFavoriteRecipes });
+  const amoutOwnRecipes = user.ownRecipes.lenght ? user.ownRecipes.lenght : 0;
+  const amoutFavoriteRecipes = user.favoriteRecipes.lenght
+    ? user.favoriteRecipes.lenght
+    : 0;
+  // user.createdAt;
+  const date = new Date();
+  const dayRejestration = user.createdAt;
+  const timeInAplication = date.getTime() - dayRejestration.getTime();
+  const time = convertMs(timeInAplication);
+
+  res.status(200).json({ amoutOwnRecipes, amoutFavoriteRecipes, time });
 };
 
 getInfoAboutUser = wrapper(getInfoAboutUser);
