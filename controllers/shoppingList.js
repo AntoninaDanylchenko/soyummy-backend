@@ -6,9 +6,9 @@ let addIngredientToShoppingList = async (req, res, next) => {
   req.user.shoppingList.push(req.body);
   const user = await req.user.save();
   if (!user) {
-    throw new HttpError(500, "Write error");
+    throw new HttpError(404, "Not found");
   }
-  res.status(201).json(user);
+  res.status(201).json({ shoppingList: user.shoppingList });
 };
 addIngredientToShoppingList = wrapper(addIngredientToShoppingList);
 
@@ -19,7 +19,7 @@ let removeIngredientFromShoppingList = async (req, res, next) => {
   req.user.shoppingList = shoppingList;
   const user = await req.user.save();
   if (!user) {
-    throw new HttpError(500, "Write error");
+    throw new HttpError(404, "Not found");
   }
   res.status(201).json(user);
 };

@@ -5,11 +5,15 @@ const { HttpError } = require("../utils/HttpError");
 let searchRecipes = async (req, res) => {
   const search = req.query.search;
 
+  if (!search) {
+    throw new HttpError(400, "Bad request");
+  }
+
   const result = await Recipe.find({
     title: { $regex: search, $options: "i" },
   });
   if (!result) {
-    throw new HttpError(404, "Not found");
+    throw new HttpError(404, "Not found recipe");
   }
   res.status(200).json({ result });
 };

@@ -1,11 +1,14 @@
 const sgMail = require("@sendgrid/mail");
-const { SENDGRID_API_KEY, SENGRID_EMAIL_FROM } = process.env;
-sgMail.setApiKey(SENDGRID_API_KEY);
 const path = require("path");
 const { convert } = require("html-to-text");
 const pug = require("pug");
+
 const { subscribeSchema } = require("../utils/joiSchemas/subscribeSchema");
 const { HttError } = require("../utils/HttpError");
+
+const { SENDGRID_API_KEY, SENGRID_EMAIL_FROM } = process.env;
+
+sgMail.setApiKey(SENDGRID_API_KEY);
 
 const subsribeMail = async (req, res) => {
   const { error } = subscribeSchema.validate(req.body);
