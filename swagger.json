@@ -11,19 +11,121 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000" }],
+  "servers": [{ "url": "http://localhost:5500" }],
   "tags": [
     {
       "name": "Auth",
       "description": "Authorization endpoints"
     },
     {
+      "name": "Subscribe",
+      "description": "Subscribtion email"
+    },
+    {
       "name": "Recipes",
-      "description": "Authorization endpoints"
+      "description": "Everything about Recipes"
+    },
+    {
+      "name": "Ingredients",
+      "description": "Everything about Ingredients"
+    },
+    {
+      "name": "Favorite recipes",
+      "description": "Find, remove and add favorite recipes"
+    },
+    {
+      "name": "Popular recipes",
+      "description": "Find popular recipes"
+    },
+    {
+      "name": "Own recipe",
+      "description": "Everything about your recipes"
+    },
+    {
+      "name": "Shopping list",
+      "description": "Everything about your shopping list"
     }
   ],
   "paths": {
-    "/auth/register": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/logout": {
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
@@ -85,16 +187,55 @@
         }
       }
     },
-    "/recipes/:category": {
+    "/recipes/main-page": {
       "get": {
         "tags": ["Recipes"],
-        "summary": "User registration",
+        "summary": "Find 4 recipes in 4 categories (Breakfast, Miscellaneous, Chicken, Dessert)",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponse"
+                }
+              }
+            }
+          },
+
+          "404": {
+            "description": "Recipe not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/recipes/{category}": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "Receiving 8 recipes of the selected category",
         "parameters": [
           {
+            "name": "category",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Name of recipe`s category"
+            "description": "Name of category",
+            "example": "Beef"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Amount recipes on page"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Number of page"
           }
         ],
         "responses": {
@@ -115,6 +256,191 @@
           }
         }
       }
+    },
+    "/recipes/id/{id}": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "Find recipe by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Id of recipe",
+            "example": "640cd5ac2d9fecf12e889864"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponse"
+                }
+              }
+            }
+          },
+
+          "400": {
+            "description": "Invalid recipe id",
+            "content": {}
+          },
+
+          "404": {
+            "description": "Recipe not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/ingredients/list": {
+      "get": {
+        "tags": ["Ingredients"],
+        "summary": "Find list of ingredients",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found ingredients list",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/ingredients": {
+      "get": {
+        "tags": ["Ingredients"],
+        "summary": "Find recipes for search ingredient",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "",
+            "example": "Challots"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request ingredient",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found ingredient or not found recipe",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/favorite": {
+      "post": {
+        "tags": ["Favorite recipes"],
+        "summary": "Add recipe to favorite",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Id of recipe",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FavoriteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": "Added to favorite"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Favorite recipes"],
+        "summary": "Get favorite recipes",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Favorite recipes"],
+        "summary": "Delete recipe from favorite",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Id of recipe",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FavoriteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/popular-recipe": {
+      "get": {
+        "tags": ["Popular recipes"],
+        "summary": "Find recipes for search ingredient",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found popular recipes",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
@@ -127,6 +453,11 @@
             "type": "string",
             "description": "User's email",
             "format": "email"
+          },
+          "username": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Andrew"
           },
           "password": {
             "type": "string",
@@ -178,10 +509,252 @@
               "example": "45"
             },
             "recipesList": {
-              "type": "object"
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "String",
+                  "description": "Recipe title"
+                },
+                "category": {
+                  "type": "String",
+                  "description": "Recipe category"
+                },
+                "area": {
+                  "type": "String",
+                  "description": "Recipe country"
+                },
+                "instructions": {
+                  "type": "String",
+                  "description": "Instruction of recipe"
+                },
+                "description": {
+                  "type": "String",
+                  "description": "Recipe description"
+                },
+                "thumb": {
+                  "type": "String",
+                  "description": "Recipe photo"
+                },
+                "preview": {
+                  "type": "String",
+                  "description": "Recipe photo preview"
+                },
+                "time": {
+                  "type": "String",
+                  "description": "Recipe preparation time"
+                },
+                "youtube": {
+                  "type": "String",
+                  "description": "Recipe cooking video"
+                },
+                "tags": {
+                  "type": "Array",
+                  "description": "Array of recipe tags"
+                },
+                "createdAt": "Recept created time",
+                "updatedAt": "Recept updated time",
+                "ingredients": {
+                  "type": [
+                    {
+                      "ingredientId": {
+                        "type": "Schema.Types.ObjectId",
+                        "description": "Ingredient's id"
+                      },
+                      "measure": {
+                        "type": "String",
+                        "description": "Ingredient's measure ibn recipe"
+                      }
+                    }
+                  ]
+                }
+              }
             }
-          },
-          "example": ["Beef", "Vegan"]
+          }
+        },
+        "example": {
+          "total": 43,
+          "recipesList": [
+            {
+              "_id": "640cd5ac2d9f",
+              "title": "Irish stew",
+              "category": "Beef",
+              "area": "Irish",
+              "instructions": "Heat the oven to 180C/350F/gas mark 4...",
+              "description": "A traditional Irish dish made with lamb...",
+              "thumb": "https://images/media/meals/sxxpst1468569714.jpg",
+              "preview": "https://res.cloudinary.com//image/kknfjaqupiqhufj5kspx.jpg",
+              "time": "160",
+              "youtube": "https://www.youtube.com/",
+              "tags": ["Stew", "Meat"],
+              "createdAt": "2023-03-11T19:25:33.240Z",
+              "updatedAt": "2023-04-14T20:02:28.085Z",
+              "ingredients": [
+                {
+                  "_id": "643e78d78a15223d43a979ba",
+                  "id": "640c2dd963a319ea671e3796",
+                  "measure": ["300g soaked overnight in water"]
+                },
+                {
+                  "_id": "643e78d78a15223d43a979bb",
+                  "id": "640c2dd963a319ea671e370c",
+                  "measure": ["2kg cut into 3cm cubes"]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "RecipeResponse": {
+        "type": "object",
+        "items": {
+          "type": "string",
+          "properties": {
+            "title": {
+              "type": "String",
+              "description": "Recipe title"
+            },
+            "category": {
+              "type": "String",
+              "description": "Recipe category"
+            },
+            "area": {
+              "type": "String",
+              "description": "Recipe country"
+            },
+            "instructions": {
+              "type": "String",
+              "description": "Instruction of recipe"
+            },
+            "description": {
+              "type": "String",
+              "description": "Recipe description"
+            },
+            "thumb": {
+              "type": "String",
+              "description": "Recipe photo"
+            },
+            "preview": {
+              "type": "String",
+              "description": "Recipe photo preview"
+            },
+            "time": {
+              "type": "String",
+              "description": "Recipe preparation time"
+            },
+            "youtube": {
+              "type": "String",
+              "description": "Recipe cooking video"
+            },
+            "tags": {
+              "type": "Array",
+              "description": "Array of recipe tags"
+            },
+            "createdAt": "Recept created time",
+            "updatedAt": "Recept updated time",
+            "ingredients": {
+              "type": [
+                {
+                  "ingredientId": {
+                    "type": "Schema.Types.ObjectId",
+                    "description": "Ingredient's id"
+                  },
+                  "measure": {
+                    "type": "String",
+                    "description": "Ingredient's measure ibn recipe"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "example": {
+          "recipe": [
+            {
+              "_id": "640cd5ac2d9f",
+              "title": "Irish stew",
+              "category": "Beef",
+              "area": "Irish",
+              "instructions": "Heat the oven to 180C/350F/gas mark 4...",
+              "description": "A traditional Irish dish made with lamb...",
+              "thumb": "https://images/media/meals/sxxpst1468569714.jpg",
+              "preview": "https://res.cloudinary.com//image/kknfjaqupiqhufj5kspx.jpg",
+              "time": "160",
+              "youtube": "https://www.youtube.com/",
+              "tags": ["Stew", "Meat"],
+              "createdAt": "2023-03-11T19:25:33.240Z",
+              "updatedAt": "2023-04-14T20:02:28.085Z",
+              "ingredients": [
+                {
+                  "_id": "643e78d78a15223d43a979ba",
+                  "id": "640c2dd963a319ea671e3796",
+                  "measure": ["300g soaked overnight in water"]
+                },
+                {
+                  "_id": "643e78d78a15223d43a979bb",
+                  "id": "640c2dd963a319ea671e370c",
+                  "measure": ["2kg cut into 3cm cubes"]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "IngredientResponse": {
+        "type": "object",
+        "ingredientList": {
+          "properties": {
+            "_id": {
+              "type": "Schema.Types.ObjectId",
+              "description": "Ingredient's id"
+            },
+            "ttl": {
+              "type": "String",
+              "description": "Ingredient's title"
+            },
+
+            "desc": {
+              "type": "String",
+              "description": "Ingredient's description"
+            },
+            "t": {
+              "type": "String",
+              "description": "Type of ingredients"
+            },
+
+            "thb": {
+              "type": "String",
+              "description": "Ingredient's photo"
+            }
+          }
+        },
+        "example": {
+          "ingredientList": [
+            {
+              "_id": "640c2dd963a319ea671e368c",
+              "ttl": "Challots",
+              "desc": "A type of onion that has a mild, sweet flavor and a distinctive bulb shape, often used in French cuisine to add flavor to sauces, dressings, and other dishes.",
+              "t": "",
+              "thb": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564674/ovlvnvcuzttiplnzewm3.png"
+            },
+            {
+              "_id": "640c2dd963a319ea671e3668",
+              "ttl": "Basil Leaves",
+              "desc": "Basil, also called great basil, is a culinary herb of the family Lamiaceae (mints).\r\n",
+              "t": "",
+              "thb": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564216/c8mwndz8kbgb29wjn4eg.png"
+            }
+          ]
+        }
+      },
+      "FavoriteRequest": {
+        "type": "object",
+        "required": ["recipeId"],
+        "properties": {
+          "recipeId": {
+            "type": "string",
+            "description": "Recipe`s id",
+            "example": "640cd5ac2d9fecf12e889864"
+          }
         }
       }
     },
