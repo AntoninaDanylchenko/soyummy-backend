@@ -8,13 +8,15 @@ let getInfoAboutUser = async (req, res, next) => {
   const amoutFavoriteRecipes = user.favoriteRecipes.lenght
     ? user.favoriteRecipes.lenght
     : 0;
-  // user.createdAt;
+
   const date = new Date();
   const dayRejestration = user.createdAt;
   const timeInAplication = date.getTime() - dayRejestration.getTime();
   const time = convertMs(timeInAplication);
 
-  res.status(200).json({ amoutOwnRecipes, amoutFavoriteRecipes, time });
+  res
+    .status(200)
+    .json({ amoutOwnRecipes, amoutFavoriteRecipes, days: time.days });
 };
 
 getInfoAboutUser = wrapper(getInfoAboutUser);
