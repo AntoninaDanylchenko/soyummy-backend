@@ -18,7 +18,7 @@ const subsribeMail = async (req, res) => {
   const html = pug.renderFile(
     path.join(__dirname, "..", "/", "template", "tplMail.pug")
   );
-  const email = req.user;
+  const email = req.body;
   const emailTpl = {
     to: email,
     from: SENGRID_EMAIL_FROM,
@@ -32,5 +32,6 @@ const subsribeMail = async (req, res) => {
     .catch((error) => {
       console.log(error.message);
     });
+  res.status(200).json("");
 };
 module.exports = { subsribeMail };

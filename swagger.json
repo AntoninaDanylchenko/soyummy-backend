@@ -122,11 +122,36 @@
             "content": {}
           },
           "401": {
-            "description": "Not authorized, or Token expired, please Login again, or Invalid token, or Email or password is incorrect",
+            "description": " Email or password is incorrect",
             "content": {}
           },
           "409": {
             "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/current": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Return current user",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": " Token expired, please Login again.",
             "content": {}
           }
         }
@@ -138,34 +163,31 @@
         "summary": "",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Registration's object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/"
-              }
-            }
-          }
-        },
         "responses": {
-          "201": {
+          "204": {
             "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
-                }
-              }
-            }
+            "content": "No Content"
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Not authorized",
             "content": {}
+          }
+        }
+      }
+    },
+    "/auth/": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": "No Content"
           },
-          "409": {
-            "description": "Provided email already exists",
+          "401": {
+            "description": "Not authorized",
             "content": {}
           }
         }
@@ -554,6 +576,114 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": ["Shopping list"],
+        "summary": "Delete ingredient from shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Ingredient object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShoppingListIdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostShoppingListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/subscribe": {
+      "get": {
+        "tags": ["Subscribe"],
+        "summary": "Send hello mail",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Shopping list"],
+        "summary": "Add ingredient to shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Ingredient object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShoppingListRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Shopping list"],
+        "summary": "Delete ingredient from shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Ingredient object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShoppingListIdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostShoppingListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
       }
     }
   },
@@ -585,20 +715,36 @@
         "items": {
           "type": "object",
           "properties": {
+            "userId": {
+              "type": "string",
+              "description": "User's id",
+              "example": "32143232436545474"
+            },
             "email": {
               "type": "string",
               "description": "User's email",
               "format": "email"
             },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
+            "username": {
+              "type": "string",
+              "description": "User's name",
+              "example": "Andrew"
+            },
+            "avatarURL": {
+              "type": "string",
+              "description": "Link to user`s avatar url",
+              "example": "//www.gravatar.com/b58996c504c5638798eb6b511e6f49af"
             }
           },
           "example": [
-            { "email": "1@gmail.com", "userId": "1" },
-            { "email": "2@gmail.com", "userId": "2" }
+            {
+              "resUser": {
+                "_id": "6443d47d40e926b3c1d9755c",
+                "username": "Andrew",
+                "email": "user@example.com",
+                "avatarURL": "//www.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af"
+              }
+            }
           ]
         }
       },
@@ -909,7 +1055,6 @@
           }
         }
       },
-
       "ModalResponse": {
         "type": "array",
         "items": {
@@ -949,10 +1094,21 @@
             "description": "ingredient id",
             "example": "640c2dd963a319ea671e374f"
           },
-          "password": {
+          "measure": {
             "type": "string",
             "description": "Ingredient measure",
             "example": "200g"
+          }
+        }
+      },
+      "ShoppingListIdRequest": {
+        "type": "object",
+        "required": ["ingredientId", "measure"],
+        "properties": {
+          "ingredientId": {
+            "type": "string",
+            "description": "ingredient id",
+            "example": "640c2dd963a319ea671e374f"
           }
         }
       },

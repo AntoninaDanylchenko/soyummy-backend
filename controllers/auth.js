@@ -23,7 +23,6 @@ let userSignup = async (req, res, next) => {
     email,
     password,
     avatarURL,
-    // refresh_token: accessToken,
   });
 
   newUser.password = undefined;
@@ -59,8 +58,14 @@ let userLogin = async (req, res, next) => {
 
   await User.findByIdAndUpdate(user._id, { refresh_token: refreshToken });
   user.password = undefined;
+  const resUser = {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    avatarURL: user.avatarURL,
+  };
 
-  res.json({ user, token: accessToken });
+  res.json({ resUser, token: accessToken });
 };
 userLogin = wrapper(userLogin);
 
