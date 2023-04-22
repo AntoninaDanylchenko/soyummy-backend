@@ -24,7 +24,9 @@ let removeIngredientFromShoppingList = async (req, res, next) => {
   if (!user) {
     throw new HttpError(404, "Not found");
   }
+
   res.status(201).json(req.body.id);
+
 };
 removeIngredientFromShoppingList = wrapper(removeIngredientFromShoppingList);
 
