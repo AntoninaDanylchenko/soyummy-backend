@@ -64,7 +64,7 @@ let userLogin = async (req, res, next) => {
     avatarURL: user.avatarURL,
   };
 
-  res.json({ resUser, token: accessToken });
+  res.status(200).json({ resUser, token: accessToken });
 };
 userLogin = wrapper(userLogin);
 

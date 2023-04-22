@@ -19,13 +19,7 @@ const { updateUserProfile } = require("../../controllers/userProfile");
 
 const router = express.Router();
 
-router
-  .route("/signup")
-  .post(
-    validateBody(joiRegisterSchema),
-    uploadCloud.single("avatar"),
-    userSignup
-  );
+router.route("/signup").post(validateBody(joiRegisterSchema), userSignup);
 router.route("/login").post(validateBody(joiLoginSchema), userLogin);
 
 router.route("/current").get(authMiddleware, getCurrentUser);
@@ -41,3 +35,22 @@ router
 router.route("/logout").post(authMiddleware, userLogout);
 
 module.exports = { authRouter: router };
+
+// "/auth/user": {
+//     "post": {
+//       "tags": ["Auth"],
+//       "summary": "Users update information",
+//       "parameters": [],
+//       "security": [{ "Bearer": [] }],
+//       "responses": {
+//         "204": {
+//           "description": "Successful operation",
+//           "content": "No Content"
+//         },
+//         "401": {
+//           "description": "Not authorized",
+//           "content": {}
+//         }
+//       }
+//     }
+//   },

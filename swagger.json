@@ -107,7 +107,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -133,7 +133,7 @@
       }
     },
     "/auth/current": {
-      "post": {
+      "get": {
         "tags": ["Auth"],
         "summary": "Return current user",
         "parameters": [],
@@ -160,7 +160,7 @@
     "/auth/logout": {
       "post": {
         "tags": ["Auth"],
-        "summary": "",
+        "summary": "Users` logout",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "responses": {
@@ -175,24 +175,7 @@
         }
       }
     },
-    "/auth/": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "",
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
-        "responses": {
-          "204": {
-            "description": "Successful operation",
-            "content": "No Content"
-          },
-          "401": {
-            "description": "Not authorized",
-            "content": {}
-          }
-        }
-      }
-    },
+
     "/recipes/category-list": {
       "get": {
         "tags": ["Recipes"],
@@ -610,81 +593,6 @@
           }
         }
       }
-    },
-    "/subscribe": {
-      "get": {
-        "tags": ["Subscribe"],
-        "summary": "Send hello mail",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {}
-          }
-        }
-      },
-      "post": {
-        "tags": ["Shopping list"],
-        "summary": "Add ingredient to shopping list",
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Ingredient object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ShoppingListRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PostShoppingListResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Shopping list"],
-        "summary": "Delete ingredient from shopping list",
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Ingredient object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ShoppingListIdRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PostShoppingListResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {}
-          }
-        }
-      }
     }
   },
   "components": {
@@ -769,21 +677,46 @@
         "items": {
           "type": "object",
           "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
+            "resUser": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "number",
+                  "description": "User's id",
+                  "example": "32143232436545474"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User's email",
+                  "format": "email"
+                },
+                "username": {
+                  "type": "string",
+                  "description": "User's name",
+                  "example": "Andrew"
+                },
+                "avatarURL": {
+                  "type": "string",
+                  "description": "Link to user`s avatar url",
+                  "example": "//www.gravatar.com/b58996c504c5638798eb6b511e6f49af"
+                }
+              }
             },
-            "userId": {
+
+            "token": {
               "type": "number",
-              "description": "User's id",
               "example": "32143232436545474"
             }
           },
-          "example": [
-            { "email": "1@gmail.com", "userId": "1" },
-            { "email": "2@gmail.com", "userId": "2" }
-          ]
+          "example": {
+            "resUser": {
+              "_id": "6443e37ad6feaf6e0cbafd41",
+              "username": "Andrew",
+              "email": "user2@example.com",
+              "avatarURL": "//www.gravatar.com/avatar/ab53a2911ddf9b4817ac01ddcd3d975f"
+            },
+            "token": "eyJhbGcNiIsInR5.eyJpZCI6IjYhZDmUwY2JhZmQIjoidXZXhhbXBsZS5jb20iLCJpYXQiOjE2ODIxODg0NzAsImV4cCI6MTY4MjI3MTI3MH0.mM8DVmEcs_UOeEu_DKTPtWyvMEnDhT3oXbIx6A1PbBY"
+          }
         }
       },
       "CategoryListResponse": {
