@@ -44,6 +44,10 @@
     {
       "name": "Shopping list",
       "description": "Everything about your shopping list"
+    },
+    {
+      "name": "Modal",
+      "description": "Find information about user"
     }
   ],
   "paths": {
@@ -52,7 +56,6 @@
         "tags": ["Auth"],
         "summary": "User registration",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Registration's object",
           "required": true,
@@ -80,7 +83,7 @@
             "content": {}
           },
           "409": {
-            "description": "Provided email already exists",
+            "description": "Email should be unique",
             "content": {}
           }
         }
@@ -89,16 +92,16 @@
     "/auth/login": {
       "post": {
         "tags": ["Auth"],
-        "summary": "User registration",
+        "summary": "User login",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Registration's object",
+          "description": "Login object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/LoginRequest"
               }
             }
           }
@@ -109,13 +112,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/LoginResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized, or Token expired, please Login again, or Invalid token, or Email or password is incorrect",
             "content": {}
           },
           "409": {
@@ -128,7 +135,7 @@
     "/auth/logout": {
       "post": {
         "tags": ["Auth"],
-        "summary": "User registration",
+        "summary": "",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -137,7 +144,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/"
               }
             }
           }
@@ -326,9 +333,8 @@
           {
             "name": "search",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string",
-            "description": "",
             "example": "Challots"
           }
         ],
@@ -366,7 +372,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FavoriteRequest"
+                "$ref": "#/components/schemas/FavoriteResponse"
               }
             }
           }
@@ -430,7 +436,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecipeResponse"
+                  "$ref": "#/components/schemas/ModalResponse"
                 }
               }
             }
@@ -441,13 +447,121 @@
           }
         }
       }
+    },
+    "/search": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "Find recipes for title",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "example": "Beef"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found recipe",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/modal": {
+      "get": {
+        "tags": ["Modal"],
+        "summary": "Find information about user, how days he is loged, how many has own recupes and how many recipes adds to favorite",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModalResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized, or Token expired, please Login again, or Invalid token, or Email or password is incorrect",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/shopping-list": {
+      "get": {
+        "tags": ["Shopping list"],
+        "summary": "Find all ingredients from shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Shopping list"],
+        "summary": "Add ingredient to shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Ingredient object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShoppingListRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": ["email", "username", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -467,6 +581,44 @@
         }
       },
       "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "userId": {
+              "type": "number",
+              "description": "User's id",
+              "example": "32143232436545474"
+            }
+          },
+          "example": [
+            { "email": "1@gmail.com", "userId": "1" },
+            { "email": "2@gmail.com", "userId": "2" }
+          ]
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginResponse": {
         "type": "array",
         "items": {
           "type": "object",
@@ -746,7 +898,7 @@
           ]
         }
       },
-      "FavoriteRequest": {
+      "FavoriteResponse": {
         "type": "object",
         "required": ["recipeId"],
         "properties": {
@@ -756,13 +908,118 @@
             "example": "640cd5ac2d9fecf12e889864"
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "Bearer": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      },
+
+      "ModalResponse": {
+        "type": "array",
+        "items": {
+          "type": "number",
+          "properties": {
+            "amoutOwnRecipes": {
+              "type": "number",
+              "description": "How many recipes user add to own recipes",
+              "example": "0"
+            },
+            "amoutFavoriteRecipes": {
+              "type": "number",
+              "description": "How many recipes user add to favorite recipes",
+              "example": "0"
+            },
+            "days": {
+              "type": "number",
+              "description": "How many days user is in aplication",
+              "example": "0"
+            }
+          },
+          "example": [
+            {
+              "amoutOwnRecipes": 2,
+              "amoutFavoriteRecipes": 4,
+              "days": 1
+            }
+          ]
+        }
+      },
+      "ShoppingListRequest": {
+        "type": "object",
+        "required": ["ingredientId", "measure"],
+        "properties": {
+          "ingredientId": {
+            "type": "string",
+            "description": "ingredient id",
+            "example": "640c2dd963a319ea671e374f"
+          },
+          "password": {
+            "type": "string",
+            "description": "Ingredient measure",
+            "example": "200g"
+          }
+        }
+      },
+      "PostShoppingListResponse": {
+        "type": "object",
+        "items": {
+          "properties": {
+            "ingredientId": {
+              "type": "Schema.Types.ObjectId",
+              "description": "Ingredient's id in ingredient`s db"
+            },
+            "measure": {
+              "type": "String",
+              "description": "Ingredient's measure"
+            },
+            "_id": {
+              "type": "Schema.Types.ObjectId",
+              "description": "Ingredient's id in shopping-list"
+            }
+          },
+          "example": [
+            {
+              "ingredientId": "640c2dd963a319ea671e374f",
+              "measure": ["20 g"],
+              "_id": "6442e7d3a93c8d3629c3be3c"
+            }
+          ]
+        }
+      },
+      "GetShoppingListResponse": {
+        "type": "object",
+        "items": {
+          "properties": {
+            "id": {
+              "type": "Schema.Types.ObjectId",
+              "description": "Ingredient's id in ingredient`s db"
+            },
+            "measure": {
+              "type": "String",
+              "description": "Ingredient's measure"
+            },
+            "_id": {
+              "type": "Schema.Types.ObjectId",
+              "description": "Ingredient's id in shopping-list"
+            }
+          },
+          "example": [
+            {
+              "id": "6442e7d3a93c8d3629c3be3c",
+              "measure": ["20 g"],
+              "ingredient": {
+                "_id": "640c2dd963a319ea671e374f",
+                "ttl": "Red Pepper",
+                "desc": "A sweet and crunchy vegetable that is often used in cooking and is a good source of vitamins A and C. It is also known as a bell pepper or capsicum.",
+                "t": "",
+                "thb": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564916/shxhx8z19qqsm3xb52kv.png"
+              }
+            }
+          ]
+        }
+      },
+      "securitySchemes": {
+        "Bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
       }
     }
   }
