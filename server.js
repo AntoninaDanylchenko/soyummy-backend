@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 const { DB_URL } = process.env;
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5500;
 
 (async () => {
   try {
