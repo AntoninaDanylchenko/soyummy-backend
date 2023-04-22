@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:5500" }],
+  "servers": [{ "url": "https://soyummy-backend-first-team.onrender.com" }],
   "tags": [
     {
       "name": "Auth",
@@ -988,15 +988,40 @@
           "properties": {
             "id": {
               "type": "Schema.Types.ObjectId",
-              "description": "Ingredient's id in ingredient`s db"
+              "description": "Ingredient's id in shopping-list"
             },
             "measure": {
               "type": "String",
               "description": "Ingredient's measure"
             },
-            "_id": {
-              "type": "Schema.Types.ObjectId",
-              "description": "Ingredient's id in shopping-list"
+            "ingredient": {
+              "type": "object",
+              "items": {
+                "properties": {
+                  "_id": {
+                    "type": "Schema.Types.ObjectId",
+                    "description": "Ingredient's id in ingredient`s db"
+                  },
+                  "ttl": {
+                    "type": "String",
+                    "description": "Ingredient's title"
+                  },
+
+                  "desc": {
+                    "type": "String",
+                    "description": "Ingredient's description"
+                  },
+                  "t": {
+                    "type": "String",
+                    "description": "Type of ingredients"
+                  },
+
+                  "thb": {
+                    "type": "String",
+                    "description": "Ingredient's photo"
+                  }
+                }
+              }
             }
           },
           "example": [
