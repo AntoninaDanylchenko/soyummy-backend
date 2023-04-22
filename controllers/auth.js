@@ -1,16 +1,15 @@
 const gravatar = require("gravatar");
-// const path = require("path");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
 
 const { wrapper } = require("../middlewares/wrapper");
-
 const { assignTokens } = require("../services/auth");
 const { User } = require("../models/User");
 const { HttpError } = require("../utils/HttpError");
 
-let userSignup = async (req, res, next) => {
+let userSignup = async (req, res, _) => {
   const { email, password, username } = req.body;
+
   const isEmailUnique = await User.findOne({ email });
   if (isEmailUnique) {
     throw new HttpError(409, "Email should be unique");
@@ -23,7 +22,6 @@ let userSignup = async (req, res, next) => {
     email,
     password,
     avatarURL,
-    // refresh_token: accessToken,
   });
 
   newUser.password = undefined;
@@ -48,8 +46,8 @@ let userLogin = async (req, res, next) => {
   }
 
   // const isPasswordCorrect = await user.isPasswordCorrect({ password });
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
   // return isPasswordCorrect;
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
   if (!isPasswordCorrect) {
     throw new HttpError(401, "Email or password is incorrect");
@@ -72,7 +70,6 @@ getCurrentUser = wrapper(getCurrentUser);
 let userLogout = async (req, res, _) => {
   const { _id, refresh_token } = req.user;
   const user = await User.findOne({ refresh_token });
-  // const user = await User.findById(_id);
 
   if (!user) {
     throw new HttpError(401, "Not authorized");
