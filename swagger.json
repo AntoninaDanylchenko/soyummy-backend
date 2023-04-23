@@ -674,6 +674,55 @@
           }
         }
       }
+    },
+    "/ownRecipes": {
+      "get": {
+        "tags": ["Own recipe"],
+        "summary": "Find all recipes from own recipes",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Own recipe"],
+        "summary": "Delete recipe from Own recipes",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Id of recipe",
+            "example": "640cd5ac2d9fecf12e889864"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Recipe with id: 640cd5ac2d9fecf12e889864 has been removed!",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
