@@ -490,7 +490,15 @@
       "get": {
         "tags": ["Popular recipes"],
         "summary": "Find recipes for search ingredient",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Quantity recipes to show"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
