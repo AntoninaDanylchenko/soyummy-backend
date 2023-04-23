@@ -573,6 +573,7 @@
         "tags": ["Subscribe"],
         "summary": "",
         "parameters": [],
+        
         "requestBody": {
           "description": "Subscribtion object",
           "required": true,

@@ -13,7 +13,9 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 const subsribeMail = async (req, res) => {
   const { error } = subscribeSchema.validate(req.body);
   if (error) {
+
     throw new HttpError(error.status, error.message);
+
   }
   const html = pug.renderFile(
     path.join(__dirname, "..", "/", "template", "tplMail.pug")
