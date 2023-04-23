@@ -35,22 +35,3 @@ router
 router.route("/logout").post(authMiddleware, userLogout);
 
 module.exports = { authRouter: router };
-
-// "/auth/user": {
-//     "post": {
-//       "tags": ["Auth"],
-//       "summary": "Users update information",
-//       "parameters": [],
-//       "security": [{ "Bearer": [] }],
-//       "responses": {
-//         "204": {
-//           "description": "Successful operation",
-//           "content": "No Content"
-//         },
-//         "401": {
-//           "description": "Not authorized",
-//           "content": {}
-//         }
-//       }
-//     }
-//   },

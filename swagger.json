@@ -138,7 +138,17 @@
         "summary": "Return current user",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-
+        "requestBody": {
+          "description": " object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -166,10 +176,45 @@
         "responses": {
           "204": {
             "description": "Successful operation",
-            "content": "No Content"
+            "content": {}
           },
           "401": {
             "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/user": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Opportunity to change user`s information(avatar and/or username)",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": " object",
+          "required": true,
+          "content": {
+            " multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "There is no content to update! Please, add new username or avatar!",
             "content": {}
           }
         }
@@ -716,6 +761,21 @@
               "avatarURL": "//www.gravatar.com/avatar/ab53a2911ddf9b4817ac01ddcd3d975f"
             },
             "token": "eyJhbGcNiIsInR5.eyJpZCI6IjYhZDmUwY2JhZmQIjoidXZXhhbXBsZS5jb20iLCJpYXQiOjE2ODIxODg0NzAsImV4cCI6MTY4MjI3MTI3MH0.mM8DVmEcs_UOeEu_DKTPtWyvMEnDhT3oXbIx6A1PbBY"
+          }
+        }
+      },
+      "UserRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "New user`s name",
+            "example": "Andrew123"
+          },
+
+          "avatar": {
+            "type": "string",
+            "format": "binary"
           }
         }
       },
