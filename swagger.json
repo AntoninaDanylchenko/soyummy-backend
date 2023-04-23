@@ -186,7 +186,7 @@
       }
     },
     "/auth/user": {
-      "post": {
+      "patch": {
         "tags": ["Auth"],
         "summary": "Opportunity to change user`s information(avatar and/or username)",
         "parameters": [],
