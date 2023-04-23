@@ -35,7 +35,7 @@ const recipeSchema = new Schema(
     },
     thumb: {
       type: String,
-      required: [true, "Add image of the dish"],
+      // required: [true, "Add image of the dish"],
     },
     preview: {
       type: String,

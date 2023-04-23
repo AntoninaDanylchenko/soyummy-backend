@@ -10,12 +10,18 @@ const {
 const { validateBody } = require("../../middlewares/validateBody");
 const { recipeJoiSchema } = require("../../utils/joiSchemas/recipeJoiSchema");
 
+const { upload } = require("../../middlewares/ownRecipesUploadMiddleware");
+
 router.use(authMiddleware);
 
 router
   .route("/")
   .get(getAllRecipesController)
-  .post(validateBody(recipeJoiSchema), createRecipeController);
+  .post(
+    validateBody(recipeJoiSchema),
+    upload.single("thumb"),
+    createRecipeController
+  );
 
 router.route("/:recipeId").delete(deleteRecipeController);
 
