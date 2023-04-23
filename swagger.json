@@ -569,7 +569,7 @@
       }
     },
     "/subscribe": {
-      "post": {
+      "get": {
         "tags": ["Subscribe"],
         "summary": "",
         "parameters": [],
