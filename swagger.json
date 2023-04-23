@@ -189,15 +189,26 @@
       "patch": {
         "tags": ["Auth"],
         "summary": "Opportunity to change user`s information(avatar and/or username)",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": false,
+            "type": "string",
+            "description": "New username",
+            "example": "Andrew123"
+          }
+        ],
         "security": [{ "Bearer": [] }],
+
         "requestBody": {
           "description": " object",
           "required": true,
           "content": {
-            " multipart/form-data": {
+            " application/octet-stream": {
               "schema": {
-                "$ref": "#/components/schemas/UserRequest"
+                "type": "string",
+                "format": "binary"
               }
             }
           }
@@ -220,7 +231,6 @@
         }
       }
     },
-
     "/recipes/category-list": {
       "get": {
         "tags": ["Recipes"],
@@ -765,15 +775,10 @@
         }
       },
       "UserRequest": {
-        "type": "object",
+        "type": "",
         "properties": {
-          "username": {
-            "type": "string",
-            "description": "New user`s name",
-            "example": "Andrew123"
-          },
-
           "avatar": {
+            "name": "avatar",
             "type": "string",
             "format": "binary"
           }

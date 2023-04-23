@@ -7,8 +7,8 @@ let updateUserProfile = async (req, res, next) => {
 
   try {
     let username = null;
-    if (req.body.username) {
-      username = req.body.username;
+    if (req.params.username) {
+      username = req.params.username;
     }
 
     // in postman filed add "avatar"
