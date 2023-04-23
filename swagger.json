@@ -573,7 +573,6 @@
         "tags": ["Subscribe"],
         "summary": "",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Subscribtion object",
           "required": true,
