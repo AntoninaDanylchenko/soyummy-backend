@@ -11,6 +11,10 @@ let getAllRecipesController = async (req, res, next) => {
 
   const recipes = await getAllRecipes(owner);
 
+  if (!recipes) {
+    return new HttpError(404, "Not found");
+  }
+
   res.status(200).json({ recipes });
 };
 
