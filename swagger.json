@@ -205,8 +205,9 @@
           "description": " object",
           "required": true,
           "content": {
-            " application/octet-stream": {
+            "multipart/form-data": {
               "schema": {
+                "name": "avatar",
                 "type": "string",
                 "format": "binary"
               }
@@ -568,24 +569,6 @@
       }
     },
     "/shopping-list": {
-      "get": {
-        "tags": ["Shopping list"],
-        "summary": "Find all ingredients from shopping list",
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetShoppingListResponse"
-                }
-              }
-            }
-          }
-        }
-      },
       "post": {
         "tags": ["Shopping list"],
         "summary": "Add ingredient to shopping list",
@@ -609,6 +592,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PostShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Shopping list"],
+        "summary": "Find all ingredients from shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetShoppingListResponse"
                 }
               }
             }
