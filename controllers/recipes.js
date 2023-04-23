@@ -1,11 +1,11 @@
 const {
   Types: { ObjectId },
-} = require("mongoose");
+} = require('mongoose');
 
-const { wrapper } = require("../middlewares/wrapper");
-const { Recipe } = require("../models/Recipe");
-const { HttpError } = require("../utils/HttpError");
-const { getRecipesByCategory } = require("../services/recipes/mainPage");
+const { wrapper } = require('../middlewares/wrapper');
+const { Recipe } = require('../models/Recipe');
+const { HttpError } = require('../utils/HttpError');
+const { getRecipesByCategory } = require('../services/recipes/mainPage');
 
 let getCategoryList = async (req, res, next) => {
   const categories = await Recipe.find({}, { category: 1, _id: 0 }).sort({
@@ -13,11 +13,11 @@ let getCategoryList = async (req, res, next) => {
   });
 
   if (!categories) {
-    throw new HttpError(404, "Not found");
+    throw new HttpError(404, 'Not found');
   }
 
   const uniqueCategories = categories
-    .map((category) => {
+    .map(category => {
       return category.category;
     })
     .filter((category, index, array) => array.indexOf(category) === index);
@@ -35,18 +35,16 @@ let getOneCategory = async (req, res, next) => {
   const paginationLimit = +limit || 8;
   const skip = (paginationPage - 1) * paginationLimit;
 
-  const recipesList = await Recipe.find({ category })
-    .skip(skip)
-    .limit(paginationLimit);
+  const recipesList = await Recipe.find({ category }).skip(skip).limit(paginationLimit);
 
   if (!recipesList) {
-    throw new HttpError(404, "Not recipes found");
+    throw new HttpError(404, 'Not recipes found');
   }
 
   const recipeCount = await Recipe.find({ category }).count();
 
   if (!recipeCount) {
-    throw new HttpError(404, "Not recipes count found");
+    throw new HttpError(404, 'Not recipes count found');
   }
 
   res.status(200).json({ total: recipeCount, recipesList });
@@ -58,13 +56,13 @@ let getRecipeById = async (req, res, next) => {
   const { id } = req.params;
 
   if (!ObjectId.isValid(id)) {
-    throw new HttpError(400, "Invalid recipe id");
+    throw new HttpError(400, 'Invalid recipe id');
   }
 
   const recipe = await Recipe.findById(id);
 
   if (!recipe) {
-    throw new HttpError(404, "Recipe not found");
+    throw new HttpError(404, 'Recipe not found');
   }
 
   res.status(200).json({ recipe });
@@ -72,15 +70,16 @@ let getRecipeById = async (req, res, next) => {
 
 getRecipeById = wrapper(getRecipeById);
 
-const defaultCategory = ["Breakfast", "Miscellaneous", "Chicken", "Dessert"];
+const defaultCategory = ['Breakfast', 'Miscellaneous', 'Chicken', 'Dessert'];
 
-let getAllRecipes = async (_, res) => {
+let getAllRecipes = async (req, res) => {
+  const { limit } = req.query;
   const recipesArrays = await Promise.all(
-    defaultCategory.map(getRecipesByCategory)
+    defaultCategory.map(category => getRecipesByCategory(category, limit))
   );
 
   if (!recipesArrays) {
-    throw new HttpError(404, "Recipes not found");
+    throw new HttpError(404, 'Recipes not found');
   }
 
   const recipesAll = recipesArrays.flat();

@@ -3,13 +3,14 @@ const { HttpError } = require('../utils/HttpError');
 const { User } = require('../models/User');
 const { getOnePopularRecipe } = require('../services/popularRecipes');
 
-let getPopularRecipes = async (_, res) => {
+let getPopularRecipes = async (req, res) => {
+  const { limit } = req.query;
   const topFavoriteRecipes = await User.aggregate([
     { $unwind: '$favoriteRecipes' },
 
     { $group: { _id: '$favoriteRecipes', count: { $sum: 1 } } },
     { $sort: { count: -1 } },
-    { $limit: 4 },
+    { $limit: +limit },
   ]);
 
   if (!topFavoriteRecipes.length) {
