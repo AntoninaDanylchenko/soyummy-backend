@@ -29,11 +29,17 @@ let updateUserProfile = async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(_id, updatedFields, {
       new: true,
     });
+    const resUser = {
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      avatarURL: updatedUser.avatarURL,
+    };
 
-    res.status(200).json({ updatedUser });
+    res.status(200).json({ resUser });
   } catch (error) {
     throw new HttpError(
-      500,
+      400,
       "There is no content to update! Please, add new username or avatar!"
     );
   }
