@@ -13,12 +13,12 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 const subsribeMail = async (req, res) => {
   const { error } = subscribeSchema.validate(req.body);
   if (error) {
-    throw new HttError();
+    throw new HttError(error.status, error.message);
   }
   const html = pug.renderFile(
     path.join(__dirname, "..", "/", "template", "tplMail.pug")
   );
-  const email = req.body;
+  const email = req.body.email;
   const emailTpl = {
     to: email,
     from: SENGRID_EMAIL_FROM,
@@ -32,6 +32,6 @@ const subsribeMail = async (req, res) => {
     .catch((error) => {
       console.log(error.message);
     });
-  res.status(200).json("");
+  res.status(200).json("Email  is send");
 };
 module.exports = { subsribeMail };
