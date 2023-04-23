@@ -205,8 +205,9 @@
           "description": " object",
           "required": true,
           "content": {
-            " application/octet-stream": {
+            "multipart/form-data": {
               "schema": {
+                "name": "avatar",
                 "type": "string",
                 "format": "binary"
               }
@@ -567,25 +568,32 @@
         }
       }
     },
-    "/shopping-list": {
-      "get": {
-        "tags": ["Shopping list"],
-        "summary": "Find all ingredients from shopping list",
+    "/subscribe": {
+      "post": {
+        "tags": ["Subscribe"],
+        "summary": "",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetShoppingListResponse"
-                }
+        "requestBody": {
+          "description": "Subscribtion object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscribtionRequest"
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Email  is send",
+            "content": {}
+          }
         }
-      },
+      }
+    },
+    "/shopping-list": {
       "post": {
         "tags": ["Shopping list"],
         "summary": "Add ingredient to shopping list",
@@ -609,6 +617,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PostShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Shopping list"],
+        "summary": "Find all ingredients from shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetShoppingListResponse"
                 }
               }
             }
@@ -1056,20 +1082,20 @@
       "ModalResponse": {
         "type": "array",
         "items": {
-          "type": "number",
+          "type": "object",
           "properties": {
             "amoutOwnRecipes": {
-              "type": "number",
+              "type": "integer",
               "description": "How many recipes user add to own recipes",
               "example": "0"
             },
             "amoutFavoriteRecipes": {
-              "type": "number",
+              "type": "integer",
               "description": "How many recipes user add to favorite recipes",
               "example": "0"
             },
             "days": {
-              "type": "number",
+              "type": "integer",
               "description": "How many days user is in aplication",
               "example": "0"
             }
@@ -1191,6 +1217,17 @@
               }
             }
           ]
+        }
+      },
+      "SubscribtionRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          }
         }
       }
     },
