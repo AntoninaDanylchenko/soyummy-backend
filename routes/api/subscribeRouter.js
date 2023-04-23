@@ -3,6 +3,6 @@ const { subsribeMail } = require("../../controllers/subscribe");
 
 const router = express.Router();
 
-router.get("/", subsribeMail);
+router.post("/", subsribeMail);
 
 module.exports = { subscribeRouter: router };
