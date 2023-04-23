@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.0.1",
   "info": {
     "version": "1.0.0",
     "title": "First So Yummy Team`s backend",
@@ -736,7 +736,7 @@
               "type": "object",
               "properties": {
                 "_id": {
-                  "type": "number",
+                  "type": "",
                   "description": "User's id",
                   "example": "32143232436545474"
                 },
@@ -1192,13 +1192,13 @@
             }
           ]
         }
-      },
-      "securitySchemes": {
-        "Bearer": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
