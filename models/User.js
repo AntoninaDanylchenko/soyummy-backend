@@ -57,8 +57,8 @@ const userSchema = new Schema(
       default: false,
     },
     subscription: {
-      type: String,
-      default: "",
+      type: Boolean,
+      default: false,
     },
   },
   {

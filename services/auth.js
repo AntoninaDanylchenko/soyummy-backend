@@ -16,7 +16,7 @@ const assignTokens = (user) => {
 
   const refreshToken = jwt.sign(
     {
-      id: user.id,
+      id: user._id,
       email: user.email,
     },
     REFRESH_TOKEN_SECRET,

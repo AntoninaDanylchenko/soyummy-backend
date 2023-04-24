@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.0.1",
   "info": {
     "version": "1.0.0",
     "title": "First So Yummy Team`s backend",
@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:5500" }],
+  "servers": [{ "url": "https://soyummy-backend-first-team.onrender.com" }],
   "tags": [
     {
       "name": "Auth",
@@ -44,6 +44,10 @@
     {
       "name": "Shopping list",
       "description": "Everything about your shopping list"
+    },
+    {
+      "name": "Modal",
+      "description": "Find information about user"
     }
   ],
   "paths": {
@@ -52,7 +56,6 @@
         "tags": ["Auth"],
         "summary": "User registration",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Registration's object",
           "required": true,
@@ -80,7 +83,7 @@
             "content": {}
           },
           "409": {
-            "description": "Provided email already exists",
+            "description": "Email should be unique",
             "content": {}
           }
         }
@@ -89,33 +92,37 @@
     "/auth/login": {
       "post": {
         "tags": ["Auth"],
-        "summary": "User registration",
+        "summary": "User login",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Registration's object",
+          "description": "Login object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/LoginRequest"
               }
             }
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/LoginResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": " Email or password is incorrect",
             "content": {}
           },
           "409": {
@@ -125,40 +132,101 @@
         }
       }
     },
-    "/auth/logout": {
-      "post": {
+    "/auth/current": {
+      "get": {
         "tags": ["Auth"],
-        "summary": "User registration",
+        "summary": "Return current user",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Registration's object",
+          "description": " object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/LoginRequest"
               }
             }
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": " Token expired, please Login again.",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Users` logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/user": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Opportunity to change user`s information(avatar and/or username)",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": false,
+            "type": "string",
+            "description": "New username",
+            "example": "Andrew123"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+
+        "requestBody": {
+          "description": " object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "name": "avatar",
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
-          },
-          "409": {
-            "description": "Provided email already exists",
+            "description": "There is no content to update! Please, add new username or avatar!",
             "content": {}
           }
         }
@@ -326,9 +394,8 @@
           {
             "name": "search",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string",
-            "description": "",
             "example": "Challots"
           }
         ],
@@ -366,7 +433,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FavoriteRequest"
+                "$ref": "#/components/schemas/FavoriteResponse"
               }
             }
           }
@@ -423,7 +490,205 @@
       "get": {
         "tags": ["Popular recipes"],
         "summary": "Find recipes for search ingredient",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Quantity recipes to show"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModalResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found popular recipes",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "Find recipes for title",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "example": "Beef"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found recipe",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/modal": {
+      "get": {
+        "tags": ["Modal"],
+        "summary": "Find information about user, how days he is loged, how many has own recupes and how many recipes adds to favorite",
         "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModalResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized, or Token expired, please Login again, or Invalid token, or Email or password is incorrect",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/subscribe": {
+      "post": {
+        "tags": ["Subscribe"],
+        "summary": "",
+        "parameters": [],
+        
+        "requestBody": {
+          "description": "Subscribtion object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscribtionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email  is send",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/shopping-list": {
+      "post": {
+        "tags": ["Shopping list"],
+        "summary": "Add ingredient to shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Ingredient object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShoppingListRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Shopping list"],
+        "summary": "Find all ingredients from shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Shopping list"],
+        "summary": "Delete ingredient from shopping list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Ingredient object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShoppingListIdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostShoppingListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/ownRecipes": {
+      "get": {
+        "tags": ["Own recipe"],
+        "summary": "Find all recipes from own recipes",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -436,7 +701,32 @@
             }
           },
           "404": {
-            "description": "Not found popular recipes",
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Own recipe"],
+        "summary": "Delete recipe from Own recipes",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Id of recipe",
+            "example": "640cd5ac2d9fecf12e889864"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Recipe with id: 640cd5ac2d9fecf12e889864 has been removed!",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
             "content": {}
           }
         }
@@ -447,7 +737,7 @@
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": ["email", "username", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -471,21 +761,110 @@
         "items": {
           "type": "object",
           "properties": {
+            "userId": {
+              "type": "string",
+              "description": "User's id",
+              "example": "32143232436545474"
+            },
             "email": {
               "type": "string",
               "description": "User's email",
               "format": "email"
             },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
+            "username": {
+              "type": "string",
+              "description": "User's name",
+              "example": "Andrew"
+            },
+            "avatarURL": {
+              "type": "string",
+              "description": "Link to user`s avatar url",
+              "example": "//www.gravatar.com/b58996c504c5638798eb6b511e6f49af"
             }
           },
           "example": [
-            { "email": "1@gmail.com", "userId": "1" },
-            { "email": "2@gmail.com", "userId": "2" }
+            {
+              "resUser": {
+                "_id": "6443d47d40e926b3c1d9755c",
+                "username": "Andrew",
+                "email": "user@example.com",
+                "avatarURL": "//www.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af"
+              }
+            }
           ]
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "resUser": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "",
+                  "description": "User's id",
+                  "example": "32143232436545474"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User's email",
+                  "format": "email"
+                },
+                "username": {
+                  "type": "string",
+                  "description": "User's name",
+                  "example": "Andrew"
+                },
+                "avatarURL": {
+                  "type": "string",
+                  "description": "Link to user`s avatar url",
+                  "example": "//www.gravatar.com/b58996c504c5638798eb6b511e6f49af"
+                }
+              }
+            },
+
+            "token": {
+              "type": "number",
+              "example": "32143232436545474"
+            }
+          },
+          "example": {
+            "resUser": {
+              "_id": "6443e37ad6feaf6e0cbafd41",
+              "username": "Andrew",
+              "email": "user2@example.com",
+              "avatarURL": "//www.gravatar.com/avatar/ab53a2911ddf9b4817ac01ddcd3d975f"
+            },
+            "token": "eyJhbGcNiIsInR5.eyJpZCI6IjYhZDmUwY2JhZmQIjoidXZXhhbXBsZS5jb20iLCJpYXQiOjE2ODIxODg0NzAsImV4cCI6MTY4MjI3MTI3MH0.mM8DVmEcs_UOeEu_DKTPtWyvMEnDhT3oXbIx6A1PbBY"
+          }
+        }
+      },
+      "UserRequest": {
+        "type": "",
+        "properties": {
+          "avatar": {
+            "name": "avatar",
+            "type": "string",
+            "format": "binary"
+          }
         }
       },
       "CategoryListResponse": {
@@ -746,7 +1125,7 @@
           ]
         }
       },
-      "FavoriteRequest": {
+      "FavoriteResponse": {
         "type": "object",
         "required": ["recipeId"],
         "properties": {
@@ -754,6 +1133,157 @@
             "type": "string",
             "description": "Recipe`s id",
             "example": "640cd5ac2d9fecf12e889864"
+          }
+        }
+      },
+      "ModalResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "amoutOwnRecipes": {
+              "type": "integer",
+              "description": "How many recipes user add to own recipes",
+              "example": "0"
+            },
+            "amoutFavoriteRecipes": {
+              "type": "integer",
+              "description": "How many recipes user add to favorite recipes",
+              "example": "0"
+            },
+            "days": {
+              "type": "integer",
+              "description": "How many days user is in aplication",
+              "example": "0"
+            }
+          },
+          "example": [
+            {
+              "amoutOwnRecipes": 2,
+              "amoutFavoriteRecipes": 4,
+              "days": 1
+            }
+          ]
+        }
+      },
+      "ShoppingListRequest": {
+        "type": "object",
+        "required": ["ingredientId", "measure"],
+        "properties": {
+          "ingredientId": {
+            "type": "string",
+            "description": "ingredient id",
+            "example": "640c2dd963a319ea671e374f"
+          },
+          "measure": {
+            "type": "string",
+            "description": "Ingredient measure",
+            "example": "200g"
+          }
+        }
+      },
+      "ShoppingListIdRequest": {
+        "type": "object",
+        "required": ["ingredientId", "measure"],
+        "properties": {
+          "ingredientId": {
+            "type": "string",
+            "description": "ingredient id",
+            "example": "640c2dd963a319ea671e374f"
+          }
+        }
+      },
+      "PostShoppingListResponse": {
+        "type": "object",
+        "items": {
+          "properties": {
+            "ingredientId": {
+              "type": "Schema.Types.ObjectId",
+              "description": "Ingredient's id in ingredient`s db"
+            },
+            "measure": {
+              "type": "String",
+              "description": "Ingredient's measure"
+            },
+            "_id": {
+              "type": "Schema.Types.ObjectId",
+              "description": "Ingredient's id in shopping-list"
+            }
+          },
+          "example": [
+            {
+              "ingredientId": "640c2dd963a319ea671e374f",
+              "measure": ["20 g"],
+              "_id": "6442e7d3a93c8d3629c3be3c"
+            }
+          ]
+        }
+      },
+      "GetShoppingListResponse": {
+        "type": "object",
+        "items": {
+          "properties": {
+            "id": {
+              "type": "Schema.Types.ObjectId",
+              "description": "Ingredient's id in shopping-list"
+            },
+            "measure": {
+              "type": "String",
+              "description": "Ingredient's measure"
+            },
+            "ingredient": {
+              "type": "object",
+              "items": {
+                "properties": {
+                  "_id": {
+                    "type": "Schema.Types.ObjectId",
+                    "description": "Ingredient's id in ingredient`s db"
+                  },
+                  "ttl": {
+                    "type": "String",
+                    "description": "Ingredient's title"
+                  },
+
+                  "desc": {
+                    "type": "String",
+                    "description": "Ingredient's description"
+                  },
+                  "t": {
+                    "type": "String",
+                    "description": "Type of ingredients"
+                  },
+
+                  "thb": {
+                    "type": "String",
+                    "description": "Ingredient's photo"
+                  }
+                }
+              }
+            }
+          },
+          "example": [
+            {
+              "id": "6442e7d3a93c8d3629c3be3c",
+              "measure": ["20 g"],
+              "ingredient": {
+                "_id": "640c2dd963a319ea671e374f",
+                "ttl": "Red Pepper",
+                "desc": "A sweet and crunchy vegetable that is often used in cooking and is a good source of vitamins A and C. It is also known as a bell pepper or capsicum.",
+                "t": "",
+                "thb": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564916/shxhx8z19qqsm3xb52kv.png"
+              }
+            }
+          ]
+        }
+      },
+      "SubscribtionRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
           }
         }
       }

@@ -1,90 +1,44 @@
-// const { wrapper } = require("../middlewares/wrapper");
-// const gravatar = require("gravatar");
-// // const path = require("path");
-// require("dotenv").config();
-
-// const { assignTokens } = require("../services/auth");
-// const { User } = require("../models/User");
-// const { HttpError } = require("../utils/HttpError");
-
-// let userSignup = async (req, res, next) => {
-//   const { email, password, username } = req.body;
-//   const isEmailUnique = await User.findOne({ email });
-//   if (isEmailUnique) {
-//     throw new HttpError(409, "Email should be unique");
-//   }
-
-//   const avatarURL = gravatar.url(email);
-//   // avatarURL: req.file.path;
-//   const newUser = await User.create({ username, email, password, avatarURL });
-//   newUser.password = undefined;
-//   res.status(201).json(newUser);
-// };
-// userSignup = wrapper(userSignup);
-
-// let userLogin = async (req, res, next) => {
-//   const { email, password } = req.body;
-
-//   const user = await User.findOne({ email });
-//   if (!user) {
-//     throw new HttpError(401, "Email or password is incorrect");
-//   }
-
-//   const isPasswordCorrect = user.isPasswordCorrect(password);
-//   if (!isPasswordCorrect) {
-//     throw new HttpError(401, "Email or password is incorrect");
-//   }
-
-//   const { accessToken, refreshToken } = assignTokens(user);
-//   await User.findByIdAndUpdate(user._id, { refresh_token: refreshToken });
-//   user.password = undefined;
-//   res.json({ user, token: accessToken });
-// };
-// userLogin = wrapper(userLogin);
-
-// let userLogout = async (req, res, next) => {};
-// userLogout = wrapper(userLogout);
-
-// module.exports = { userSignup, userLogin, userLogout };
-
 const gravatar = require("gravatar");
-// const path = require("path");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
 
 const { wrapper } = require("../middlewares/wrapper");
-
 const { assignTokens } = require("../services/auth");
 const { User } = require("../models/User");
 const { HttpError } = require("../utils/HttpError");
 
-let userSignup = async (req, res, next) => {
+let userSignup = async (req, res, _) => {
   const { email, password, username } = req.body;
+
   const isEmailUnique = await User.findOne({ email });
   if (isEmailUnique) {
     throw new HttpError(409, "Email should be unique");
   }
 
   const avatarURL = gravatar.url(email);
-  // avatarURL: req.file.path;
-
-  // const { accessToken } = assignTokens(req.body);
 
   const newUser = await User.create({
     username,
     email,
     password,
     avatarURL,
-    // refresh_token: accessToken,
   });
+
   newUser.password = undefined;
-  res.status(201).json(newUser);
+
+  const resUser = {
+    _id: newUser._id,
+    username: newUser.username,
+    email: newUser.email,
+    avatarURL: newUser.avatarURL,
+  };
+  res.status(201).json({ resUser });
 };
 userSignup = wrapper(userSignup);
 
 let userLogin = async (req, res, next) => {
   const { email, password } = req.body;
- 
+
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -92,8 +46,8 @@ let userLogin = async (req, res, next) => {
   }
 
   // const isPasswordCorrect = await user.isPasswordCorrect({ password });
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
   // return isPasswordCorrect;
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
   if (!isPasswordCorrect) {
     throw new HttpError(401, "Email or password is incorrect");
@@ -103,8 +57,14 @@ let userLogin = async (req, res, next) => {
 
   await User.findByIdAndUpdate(user._id, { refresh_token: refreshToken });
   user.password = undefined;
+  const resUser = {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    avatarURL: user.avatarURL,
+  };
 
-  res.json({ user, token: accessToken });
+  res.status(200).json({ resUser, token: accessToken });
 };
 userLogin = wrapper(userLogin);
 
@@ -113,17 +73,10 @@ let getCurrentUser = async (req, res) => {
 };
 getCurrentUser = wrapper(getCurrentUser);
 
-// let updateUser = async (req, res) => {};
-
-// updateUser = wrapper(updateUser);
-
 let userLogout = async (req, res, _) => {
-  // const {} = req.user;
-  // eslint-disable-next-line camelcase
   const { _id, refresh_token } = req.user;
   const user = await User.findOne({ refresh_token });
-  // const user = await User.findById(_id);
- 
+
   if (!user) {
     throw new HttpError(401, "Not authorized");
   }
@@ -138,6 +91,5 @@ module.exports = {
   userSignup,
   userLogin,
   getCurrentUser,
-  // updateUser,
   userLogout,
 };
