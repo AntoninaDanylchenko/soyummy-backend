@@ -9,7 +9,7 @@ let addFavorite = async (req, res, next) => {
 
   const recipe = await Recipe.findById(recipeId, {});
   if (!recipe) {
-    res.status(422).json({ message: `Recipe with ID ${recipeId} not found.` });
+    res.status(404).json({ message: `Recipe with ID ${recipeId} not found.` });
     return;
   }
 
