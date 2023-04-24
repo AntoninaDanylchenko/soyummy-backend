@@ -14,14 +14,16 @@ let getAllRecipesController = async (req, res, next) => {
   if (!recipes) {
     return new HttpError(404, "Not found");
   }
+
   res.status(200).json({ recipes });
 };
 
 let createRecipeController = async (req, res, next) => {
   const { body } = req;
   const { _id: owner, ownRecipes } = req.user;
+  const { path: thumb } = req.file;
 
-  const created = await createRecipe(body, owner);
+  const created = await createRecipe(body, thumb, owner);
 
   if (created) {
     await ownRecipes.unshift(created);

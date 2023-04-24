@@ -11,13 +11,13 @@ const createRecipe = async (
     area,
     instructions,
     description,
-    thumb,
     preview,
     time,
     youtube,
     tags,
     ingredients,
   },
+  thumb,
   owner
 ) => {
   return await Recipe.create({
