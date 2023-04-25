@@ -17,7 +17,8 @@ const subsribeMail = async (req, res) => {
   const emailTpl = {
     to: email,
     from: SENGRID_EMAIL_FROM,
-    subject: "Thank you for subscribe!",
+    subject:
+      "Thank you for your subscription to the news So Yummy. Be the first to receive the newest recipes!",
     html: html,
     text: convert(html),
   };
