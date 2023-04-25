@@ -189,27 +189,27 @@
       "patch": {
         "tags": ["Auth"],
         "summary": "Opportunity to change user`s information(avatar and/or username)",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "required": false,
-            "type": "string",
-            "description": "New username",
-            "example": "Andrew123"
-          }
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
-
         "requestBody": {
           "description": " object",
           "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
-                "name": "avatar",
-                "type": "string",
-                "format": "binary"
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "User's new name",
+                    "example": "Andrew&Ko"
+                  },
+                  "avatar": {
+                    "name": "avatar",
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
               }
             }
           }
@@ -581,7 +581,7 @@
         "tags": ["Subscribe"],
         "summary": "",
         "parameters": [],
-        
+
         "requestBody": {
           "description": "Subscribtion object",
           "required": true,
@@ -684,6 +684,39 @@
       }
     },
     "/ownRecipes": {
+      "post": {
+        "tags": ["Own recipe"],
+        "summary": "Add new recipe",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": " object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/OwnRecipeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      },
       "get": {
         "tags": ["Own recipe"],
         "summary": "Find all recipes from own recipes",
@@ -1285,6 +1318,107 @@
             "description": "User's email",
             "format": "email"
           }
+        }
+      },
+      "OwnRecipeRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "String",
+            "description": "Recipe title"
+          },
+          "category": {
+            "type": "String",
+            "description": "Recipe category"
+          },
+          "area": {
+            "type": "String",
+            "description": "Recipe country"
+          },
+          "instructions": {
+            "type": "String",
+            "description": "Instruction of recipe"
+          },
+          "description": {
+            "type": "String",
+            "description": "Recipe description"
+          },
+          "thumb": {
+            "type": "String",
+            "description": "Recipe photo"
+          },
+          "preview": {
+            "type": "String",
+            "description": "Recipe photo preview"
+          },
+          "time": {
+            "type": "String",
+            "description": "Recipe preparation time"
+          },
+          "youtube": {
+            "type": "String",
+            "description": "Recipe cooking video"
+          },
+          "tags": {
+            "type": "Array",
+            "description": "Array of recipe tags"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ingredientId": {
+                  "type": "Schema.Types.ObjectId",
+                  "description": "Ingredient's id"
+                },
+                "measure": {
+                  "type": "String",
+                  "description": "Ingredient's measure ibn recipe"
+                }
+              }
+            }
+          },
+          "avatar": {
+            "name": "avatar",
+            "type": "string",
+            "format": "binary"
+          },
+          "owner": {
+            "type": "String",
+            "description": "Id ownera"
+          }
+        },
+        "example": {
+          "recipe": [
+            {
+              "_id": "640cd5ac2d9f",
+              "title": "Irish stew",
+              "category": "Beef",
+              "area": "Irish",
+              "instructions": "Heat the oven to 180C/350F/gas mark 4...",
+              "description": "A traditional Irish dish made with lamb...",
+              "thumb": "https://images/media/meals/sxxpst1468569714.jpg",
+              "preview": "https://res.cloudinary.com//image/kknfjaqupiqhufj5kspx.jpg",
+              "time": "160",
+              "youtube": "https://www.youtube.com/",
+              "tags": ["Stew", "Meat"],
+              "createdAt": "2023-03-11T19:25:33.240Z",
+              "updatedAt": "2023-04-14T20:02:28.085Z",
+              "ingredients": [
+                {
+                  "_id": "643e78d78a15223d43a979ba",
+                  "id": "640c2dd963a319ea671e3796",
+                  "measure": ["300g soaked overnight in water"]
+                },
+                {
+                  "_id": "643e78d78a15223d43a979bb",
+                  "id": "640c2dd963a319ea671e370c",
+                  "measure": ["2kg cut into 3cm cubes"]
+                }
+              ]
+            }
+          ]
         }
       }
     },
