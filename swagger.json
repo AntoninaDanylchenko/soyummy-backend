@@ -1343,14 +1343,6 @@
             "type": "String",
             "description": "Recipe description"
           },
-          "thumb": {
-            "type": "String",
-            "description": "Recipe photo"
-          },
-          "preview": {
-            "type": "String",
-            "description": "Recipe photo preview"
-          },
           "time": {
             "type": "String",
             "description": "Recipe preparation time"
@@ -1383,10 +1375,6 @@
             "name": "avatar",
             "type": "string",
             "format": "binary"
-          },
-          "owner": {
-            "type": "String",
-            "description": "Id ownera"
           }
         },
         "example": {
