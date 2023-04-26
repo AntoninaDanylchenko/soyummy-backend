@@ -23,7 +23,7 @@ let createRecipeController = async (req, res, next) => {
   const { _id: owner, ownRecipes } = req.user;
   const { path: thumb } = req.file;
 
-  const created = await createRecipe(body, thumb, owner);
+  const created = await createRecipe({ body, thumb, owner });
 
   if (created) {
     await ownRecipes.unshift(created);
