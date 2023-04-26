@@ -12,7 +12,7 @@ let searchRecipes = async (req, res, next) => {
     const result = await Recipe.find({
       title: { $regex: search, $options: "i" },
     });
-    if (!result || result.length === 0) {
+    if (!result) {
       return new HttpError(404, "Not found recipe");
     }
     res.status(200).json(result);
