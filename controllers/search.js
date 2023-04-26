@@ -2,20 +2,23 @@ const { wrapper } = require("../middlewares/wrapper");
 const { Recipe } = require("../models/Recipe");
 const { HttpError } = require("../utils/HttpError");
 
-let searchRecipes = async (req, res) => {
+let searchRecipes = async (req, res, next) => {
   const search = req.query.search;
 
   if (!search) {
     throw new HttpError(400, "Bad request");
   }
-
-  const result = await Recipe.find({
-    title: { $regex: search, $options: "i" },
-  });
-  if (!result) {
-    throw new HttpError(404, "Not found recipe");
+  try {
+    const result = await Recipe.find({
+      title: { $regex: search, $options: "i" },
+    });
+    if (!result || result.length === 0) {
+      return new HttpError(404, "Not found recipe");
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({ result });
 };
 searchRecipes = wrapper(searchRecipes);
 

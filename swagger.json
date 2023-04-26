@@ -489,14 +489,14 @@
     "/popular-recipe": {
       "get": {
         "tags": ["Popular recipes"],
-        "summary": "Find recipes for search ingredient",
+        "summary": "Find popular recippes",
         "parameters": [
           {
             "name": "limit",
             "in": "query",
             "required": false,
             "type": "string",
-            "description": "Quantity recipes to show"
+            "description": "Amount recipes on page"
           }
         ],
         "responses": {
@@ -505,7 +505,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ModalResponse"
+                  "$ref": "#/components/schemas/RecipeResponse"
                 }
               }
             }
