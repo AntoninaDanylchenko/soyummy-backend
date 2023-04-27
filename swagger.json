@@ -1354,7 +1354,7 @@
                   "description": "Ingredient's id"
                 },
                 "measure": {
-                  "type": "String",
+                  "type": "string",
                   "description": "Ingredient's measure ibn recipe"
                 }
               }
