@@ -23,33 +23,3 @@ router.route("/").get(getAllRecipesController).post(
 router.route("/:recipeId").delete(deleteRecipeController);
 
 module.exports = { ownRecipesRouter: router };
-
-// "post": {
-//         "tags": ["Own recipe"],
-//         "summary": "Add recipe to own recipes",
-//         "parameters": [],
-//         "security": [{ "Bearer": [] }],
-//         "requestBody": {
-//           "description": "Ingredient object",
-//           "required": true,
-//           "content": {
-//             "application/json": {
-//               "schema": {
-//                 "$ref": "#/components/schemas/ShoppingListRequest"
-//               }
-//             }
-//           }
-//         },
-//         "responses": {
-//           "200": {
-//             "description": "Successful operation",
-//             "content": {
-//               "application/json": {
-//                 "schema": {
-//                   "$ref": "#/components/schemas/PostShoppingListResponse"
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       },

@@ -1,10 +1,7 @@
 const { wrapper } = require("../middlewares/wrapper");
 const { HttpError } = require("../utils/HttpError");
-const {
-  getAllRecipes,
-  createRecipe,
-  removeRecipe,
-} = require("../services/ownRecipes");
+const { getAllRecipes, removeRecipe } = require("../services/ownRecipes");
+const { Recipe } = require("../models/Recipe");
 
 let getAllRecipesController = async (req, res, next) => {
   const { _id: owner } = req.user;
@@ -19,16 +16,42 @@ let getAllRecipesController = async (req, res, next) => {
 };
 
 let createRecipeController = async (req, res, next) => {
-  const { body } = req;
+  console.log(req.body.title);
+  const {
+    title,
+    category,
+    area,
+    instructions,
+    description,
+    preview,
+    time,
+    youtube,
+    tags,
+    ingredients,
+  } = req.body;
   const { _id: owner, ownRecipes } = req.user;
   const { path: thumb } = req.file;
 
-  const created = await createRecipe({ body, thumb, owner });
+  const created = await Recipe.create({
+    title,
+    category,
+    area,
+    instructions,
+    description,
+    preview,
+    time,
+    youtube,
+    tags,
+    ingredients,
+    thumb,
+    owner,
+  });
+  if (!created) {
+    throw new HttpError("Error create recipe");
 
-  if (created) {
-    await ownRecipes.unshift(created);
-    await req.user.save();
   }
+  await ownRecipes.unshift(created);
+  await req.user.save();
 
   res.status(201).json(created);
 };

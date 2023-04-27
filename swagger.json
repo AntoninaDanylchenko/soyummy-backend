@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://soyummy-backend-first-team.onrender.com" }],
+  "servers": [{ "url":"https://soyummy-backend-first-team.onrender.com" }],
   "tags": [
     {
       "name": "Auth",
@@ -138,17 +138,6 @@
         "summary": "Return current user",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": " object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful operation",
