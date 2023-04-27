@@ -30,9 +30,7 @@ let createRecipeController = async (req, res, next) => {
     await req.user.save();
   }
 
-  res.status(201).json({
-    message: `New recipe has been created!`,
-  });
+  res.status(201).json(created);
 };
 
 let deleteRecipeController = async (req, res, next) => {
