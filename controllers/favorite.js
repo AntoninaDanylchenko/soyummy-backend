@@ -18,7 +18,7 @@ let addFavorite = async (req, res, next) => {
     { _id: user._id }, // search condition
     { $addToSet: { favoriteRecipes: recipeId } } //  in field favoriteRecipes add element recipeId
   );
-  res.status(201).json({ message: "Added to favorite" });
+  res.status(201).json(recipe);
 };
 
 addFavorite = wrapper(addFavorite);

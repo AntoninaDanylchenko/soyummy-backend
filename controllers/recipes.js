@@ -55,17 +55,56 @@ getOneCategory = wrapper(getOneCategory);
 let getRecipeById = async (req, res, next) => {
   const { id } = req.params;
 
-  if (!ObjectId.isValid(id)) {
-    throw new HttpError(400, 'Invalid recipe id');
-  }
-
-  const recipe = await Recipe.findById(id);
+  const recipe = await Recipe.aggregate([
+    {
+      $match: {
+        _id: new ObjectId(id),
+      },
+    },
+    {
+      $lookup: {
+        from: "ingredients",
+        localField: "ingredients.id",
+        foreignField: "_id",
+        as: "ingr_nfo",
+      },
+    },
+    {
+      $set: {
+        ingredients: {
+          $map: {
+            input: "$ingredients",
+            in: {
+              $mergeObjects: [
+                "$$this",
+                {
+                  $arrayElemAt: [
+                    "$ingr_nfo",
+                    {
+                      $indexOfArray: ["$ingr_nfo._id", "$$this.id"],
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $unset: ["ingr_nfo", "ingredients.id"],
+    },
+  ]);
 
   if (!recipe) {
-    throw new HttpError(404, 'Recipe not found');
+    throw new HttpError(404, "Recipe not found");
   }
 
-  res.status(200).json({ recipe });
+  res.status(200).json({
+    data: {
+      recipe: recipe[0],
+    },
+  });
 };
 
 getRecipeById = wrapper(getRecipeById);
