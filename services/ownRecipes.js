@@ -42,6 +42,5 @@ const removeRecipe = async (id, owner) => {
 
 module.exports = {
   getAllRecipes,
-  createRecipe,
   removeRecipe,
 };
