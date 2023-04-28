@@ -1350,11 +1350,11 @@
               "type": "object",
               "properties": {
                 "ingredientId": {
-                  "type": "Schema.Types.ObjectId",
+                  "type": "string",
                   "description": "Ingredient's id"
                 },
                 "measure": {
-                  "type": "String",
+                  "type": "string",
                   "description": "Ingredient's measure ibn recipe"
                 }
               }
