@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url":"https://soyummy-backend-first-team.onrender.com" }],
+  "servers": [{ "url": "https://soyummy-backend-first-team.onrender.com" }],
   "tags": [
     {
       "name": "Auth",
@@ -1349,7 +1349,7 @@
             "items": {
               "type": "object",
               "properties": {
-                "ingredientId": {
+                "id": {
                   "type": "string",
                   "description": "Ingredient's id"
                 },
