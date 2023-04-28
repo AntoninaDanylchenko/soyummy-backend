@@ -48,8 +48,8 @@ const recipeSchema = new Schema(
       type: [
         {
           id: {
-            type: Schema.Types.ObjectId,
-            ref: "ingredient",
+            type: String,
+            // ref: "ingredient",
           },
           measure: {
             type: String,
