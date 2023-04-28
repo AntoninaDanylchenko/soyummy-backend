@@ -1,35 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-// const ingredientIdSchema = new Schema({
-//   productId: {
-//     type: String,
-//     required: true,
-//   },
-//   measure: {
-//     type: String,
-//     required: true,
-//   },
-// });
-// var mySchemaObj = new MySchema(
-//   {mySubSchema: [new MySubSchema(  //<-- Shouldn't have array "[" here
-//        {
-//           type: "foo",
-//           meta: "bar"
-//        }
-//     )]
-//   }
-// )
-
-// const ingredientIdSchema = new Schema({
-//   productId: {
-//     type: Schema.Types.ObjectId,
-//     ref: "ingredientId",
-//   },
-//   measure: {
-//     type: String,
-//   },
-// });
-
 const recipeSchema = new Schema(
   {
     title: {
@@ -73,16 +43,13 @@ const recipeSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    // ingredients: {
-    //   type: array
-    //   ref: "ingredientId",
-    // },
+
     ingredients: {
       type: [
         {
-          productId: {
+          ingredientId: {
             type: Schema.Types.ObjectId,
-            ref: "ingredientId",
+            ref: "ingredient",
           },
           measure: {
             type: String,
@@ -96,6 +63,5 @@ const recipeSchema = new Schema(
 );
 
 const Recipe = model("recipe", recipeSchema);
-// const IngredientId = model("ingredientId", ingredientIdSchema);
 
 module.exports = { Recipe };
