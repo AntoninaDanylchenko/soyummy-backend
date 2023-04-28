@@ -2,12 +2,12 @@ const { Schema, model } = require("mongoose");
 
 const ingredientsSchema = new Schema({
   id: {
-    type: String,
-    // ref: "ingredient",
+    type: Schema.Types.ObjectId,
+    ref: "ingredient",
   },
   measure: {
-    type: String,
-    default: null,
+    type: [String],
+    default: [],
   },
 });
 
