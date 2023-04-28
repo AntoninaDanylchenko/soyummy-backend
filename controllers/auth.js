@@ -69,7 +69,14 @@ let userLogin = async (req, res, next) => {
 userLogin = wrapper(userLogin);
 
 let getCurrentUser = async (req, res) => {
-  res.status(200).json({ user: req.user });
+  const { user } = req;
+  const resUser = {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    avatarURL: user.avatarURL,
+  };
+  res.status(200).json({ resUser });
 };
 getCurrentUser = wrapper(getCurrentUser);
 
