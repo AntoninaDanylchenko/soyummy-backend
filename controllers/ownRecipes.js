@@ -29,7 +29,7 @@ let createRecipeController = async (req, res, next) => {
     tags,
     ingredients,
   } = req.body;
-  const { _id: owner, ownRecipes } = req.user;
+  const { _id: owner } = req.user;
   const { path: thumb } = req.file;
 
   const created = await Recipe.create({
@@ -48,10 +48,9 @@ let createRecipeController = async (req, res, next) => {
   });
   if (!created) {
     throw new HttpError("Error create recipe");
-
   }
-  await ownRecipes.unshift(created);
-  await req.user.save();
+  // await ownRecipes.unshift(created);
+  // await req.user.save();
 
   res.status(201).json(created);
 };
