@@ -38,8 +38,8 @@ const userSchema = new Schema(
             ref: "Ingredient",
           },
           measure: {
-            type: [String],
-            default: [],
+            type: String,
+            required: [true, "Measure is required"],
           },
         },
       ],
