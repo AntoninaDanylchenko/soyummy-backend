@@ -33,7 +33,7 @@ let createRecipeController = async (req, res, next) => {
   const { path } = req.file;
   const thumb = path;
 
-  const preview = path.split("/").splice(6, "c_crop,h_200,w_200").joi();
+  const preview = path.split("/").splice(6, "c_crop,h_200,w_200").join("/");
 
   // https://res.cloudinary.com/demo/image/upload/c_crop,h_200,w_200/docs/models.jpg
 
