@@ -18,6 +18,16 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage });
+const storageSmall = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: "thumb",
+  allowedFormats: ["jpg", "png"],
+  transformation: [{ width: 500, height: 500, crop: "limit" }],
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage, storageSmall });
 
 module.exports = { upload };

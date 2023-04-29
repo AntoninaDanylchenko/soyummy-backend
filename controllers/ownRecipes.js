@@ -1,10 +1,7 @@
-const cloudinary = require("cloudinary").v2;
-
 const { wrapper } = require("../middlewares/wrapper");
 const { HttpError } = require("../utils/HttpError");
 const { getAllRecipes, removeRecipe } = require("../services/ownRecipes");
 const { Recipe } = require("../models/Recipe");
-const { uploadImage } = require("../utils/uploadImage");
 
 let getAllRecipesController = async (req, res, next) => {
   const { _id: owner } = req.user;
@@ -31,15 +28,11 @@ let createRecipeController = async (req, res, next) => {
     tags,
     ingredients,
   } = req.body;
+
   const { _id: owner } = req.user;
-  const { path: thumb } = req.file;
-  const imgUpload = uploadImage(thumb);
-  const imgTag = cloudinary.image(imgUpload, {
-    height: 100,
-    width: 150,
-    crop: "scale",
-  });
-  const preview = imgTag;
+  const { path } = req.file;
+  const preview = path[1];
+  const thumb = path[0];
 
   const parseIngr = JSON.parse(ingredients);
 
