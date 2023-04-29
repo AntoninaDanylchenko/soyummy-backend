@@ -31,9 +31,13 @@ let createRecipeController = async (req, res, next) => {
 
   const { _id: owner } = req.user;
   const { path } = req.file;
-  const preview = path[1];
-  const thumb = path[0];
+  const thumb = path;
 
+  const preview = path.split("/").splice(6, "c_crop,h_200,w_200").joi();
+
+  // https://res.cloudinary.com/demo/image/upload/c_crop,h_200,w_200/docs/models.jpg
+
+  // https://res.cloudinary.com/dtwijsbjj/image/upload/v1682787717/j7myx43xnh2dmoesgmcb.jpg
   const parseIngr = JSON.parse(ingredients);
 
   const newRecipe = {
