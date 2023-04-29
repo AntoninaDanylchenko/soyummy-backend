@@ -23,14 +23,16 @@ let createRecipeController = async (req, res, next) => {
     area,
     instructions,
     description,
-    preview,
     time,
     youtube,
     tags,
     ingredients,
   } = req.body;
+
   const { _id: owner } = req.user;
-  const { path: thumb } = req.file;
+  const { path } = req.file;
+  const preview = path[1];
+  const thumb = path[0];
 
   const parseIngr = JSON.parse(ingredients);
 
