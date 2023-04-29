@@ -27,7 +27,6 @@ let ingredients = async (req, res, next) => {
   try {
     filterIngredient = await Ingredient.find({
       ttl: { $regex: `${search}`, $options: "i" },
-      // ttl: { $eq: `${query}` },
     });
   } catch (error) {
     throw new HttpError(404, `Not found ingredient: ${error.message}`);
@@ -45,7 +44,7 @@ let ingredients = async (req, res, next) => {
       throw new HttpError(404, "Not found recipe");
     }
 
-    res.status(200).json({ result });
+    res.status(200).json(result);
   } catch (error) {
     throw new HttpError(404, `Not found recipe: ${error.message}`);
   }
