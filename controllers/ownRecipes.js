@@ -16,7 +16,6 @@ let getAllRecipesController = async (req, res, next) => {
 };
 
 let createRecipeController = async (req, res, next) => {
-  console.log(req.body.title);
   const {
     title,
     category,
@@ -35,7 +34,9 @@ let createRecipeController = async (req, res, next) => {
 
   const previewArr = thumb.split("/");
 
-  const preview = previewArr.splice(5, 0, "c_crop,h_200,w_200").join("/");
+  const newPreviewArr = previewArr.splice(5, 0, "c_crop,h_200,w_200");
+
+  const newPreview = newPreviewArr.join("/");
 
   const parseIngr = JSON.parse(ingredients);
 
@@ -45,7 +46,7 @@ let createRecipeController = async (req, res, next) => {
     area,
     instructions,
     description,
-    preview,
+    preview: newPreview,
     time,
     youtube,
     tags,
