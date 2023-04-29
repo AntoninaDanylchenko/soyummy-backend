@@ -33,11 +33,10 @@ let createRecipeController = async (req, res, next) => {
   const { path } = req.file;
   const thumb = path;
 
-  const preview = path.split("/").splice(5, 0, "c_crop,h_200,w_200").join("/");
+  const previewArr = thumb.split("/");
 
-  // https://res.cloudinary.com/demo/image/upload/c_crop,h_200,w_200/docs/models.jpg
+  const preview = previewArr.splice(5, 0, "c_crop,h_200,w_200").join("/");
 
-  // https://res.cloudinary.com/dtwijsbjj/image/upload/v1682787717/j7myx43xnh2dmoesgmcb.jpg
   const parseIngr = JSON.parse(ingredients);
 
   const newRecipe = {
