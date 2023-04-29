@@ -20,7 +20,7 @@ const storage = new CloudinaryStorage({
 
 const storageSmall = new CloudinaryStorage({
   cloudinary: cloudinary,
-  folder: "thumb",
+  folder: "preview",
   allowedFormats: ["jpg", "png"],
   transformation: [{ width: 500, height: 500, crop: "limit" }],
   filename: (req, file, cb) => {
