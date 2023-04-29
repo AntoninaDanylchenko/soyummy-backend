@@ -81,7 +81,7 @@ let getCurrentUser = async (req, res) => {
 getCurrentUser = wrapper(getCurrentUser);
 
 let userLogout = async (req, res, _) => {
-  const { _id, refresh_token } = req.user;
+  const { _id, refreshToken: refresh_token } = req.user;
   const user = await User.findOne({ refresh_token });
 
   if (!user) {
