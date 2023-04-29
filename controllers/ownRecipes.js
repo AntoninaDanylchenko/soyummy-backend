@@ -30,13 +30,9 @@ let createRecipeController = async (req, res, next) => {
 
   const { _id: owner } = req.user;
   const { path } = req.file;
-  const thumb = path;
+  const thumb = `${path}?named=large`;
 
-  const previewArr = thumb.split("/");
-
-  const newPreviewArr = previewArr.splice(5, 0, "c_crop,h_200,w_200");
-
-  const newPreview = newPreviewArr.join("/");
+  const preview = `${path}?named=thumbnail`;
 
   const parseIngr = JSON.parse(ingredients);
 
@@ -46,7 +42,7 @@ let createRecipeController = async (req, res, next) => {
     area,
     instructions,
     description,
-    preview: newPreview,
+    preview,
     time,
     youtube,
     tags,

@@ -16,6 +16,11 @@ const storage = new CloudinaryStorage({
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
+
+  transformation: [
+    { width: 200, height: 200, crop: "fill", named: "thumbnail" },
+    { width: 800, height: 800, crop: "fill", named: "large" },
+  ],
 });
 
 
