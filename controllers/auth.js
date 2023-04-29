@@ -87,7 +87,6 @@ let userLogout = async (req, res, _) => {
   if (!user) {
     throw new HttpError(401, "Not authorized");
   }
-  a;
 
   await User.findByIdAndUpdate(_id, { token: "" });
 
