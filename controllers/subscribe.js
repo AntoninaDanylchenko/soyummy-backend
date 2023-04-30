@@ -13,10 +13,11 @@ const subsribeMail = async (req, res) => {
   const html = pug.renderFile(
     path.join(__dirname, "..", "/", "template", "tplMail.pug")
   );
-
+  console.log(email);
   const emailTpl = {
     to: email,
     from: SENGRID_EMAIL_FROM,
+    cc: "antonina.ivanets@ukr.net",
     subject:
       "Thank you for your subscription to the news So Yummy. Be the first to receive the newest recipes!",
     html: html,
