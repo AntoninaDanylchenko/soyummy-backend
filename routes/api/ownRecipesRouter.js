@@ -14,11 +14,10 @@ const { upload } = require("../../middlewares/ownRecipesUploadMiddleware");
 
 router.use(authMiddleware);
 
-router.route("/").get(getAllRecipesController).post(
-  // validateBody(recipeJoiSchema),
-  upload.single("thumb"),
-  createRecipeController
-);
+router
+  .route("/")
+  .get(getAllRecipesController)
+  .post(upload.single("thumb"), createRecipeController);
 
 router.route("/:recipeId").delete(deleteRecipeController);
 

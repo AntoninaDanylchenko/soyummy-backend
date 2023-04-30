@@ -55,8 +55,6 @@ let createRecipeController = async (req, res, next) => {
   if (!created) {
     throw new HttpError("Error create recipe");
   }
-  // await ownRecipes.unshift(created);
-  // await req.user.save();
 
   res.status(201).json(created);
 };
