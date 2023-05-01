@@ -1,7 +1,7 @@
 const sgMail = require("@sendgrid/mail");
-// const path = require("path");
-// const { convert } = require("html-to-text");
-// const pug = require("pug");
+const path = require("path");
+const { convert } = require("html-to-text");
+const pug = require("pug");
 
 const { SENDGRID_API_KEY, SENGRID_EMAIL_FROM } = process.env;
 
@@ -10,17 +10,17 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 const subsribeMail = async (req, res) => {
   const { email } = req.body;
 
-  // const html = pug.renderFile(
-  //   path.join(__dirname, "..", "/", "template", "tplMail.pug")
-  // );
+  const html = pug.renderFile(
+    path.join(__dirname, "..", "/", "template", "tplMail.pug")
+  );
 
   const emailTpl = {
     to: email,
     from: SENGRID_EMAIL_FROM,
     subject:
       "Thank you for your subscription to the news So Yummy. Be the first to receive the newest recipes!",
-    html: "<strong>test memail sandgrid</strong>",
-    text: "<strong>test memail sandgrid</strong>",
+    html: html,
+    text: convert(html),
   };
   await sgMail
     .send(emailTpl)
