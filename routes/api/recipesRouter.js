@@ -6,11 +6,8 @@ const {
   getAllRecipes,
   getRecipeById,
 } = require("../../controllers/recipes");
-const { authMiddleware } = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
-
-router.use(authMiddleware);
 
 router.get("/category-list", getCategoryList);
 
