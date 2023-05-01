@@ -13,7 +13,9 @@ const subsribeMail = async (req, res) => {
   const html = pug.renderFile(
     path.join(__dirname, "..", "/", "template", "tplMail.pug")
   );
+
   console.log(email);
+
   const emailTpl = {
     to: email,
     from: SENGRID_EMAIL_FROM,
@@ -23,12 +25,14 @@ const subsribeMail = async (req, res) => {
     html: html,
     text: convert(html),
   };
+
   await sgMail
     .send(emailTpl)
     .then(() => console.log("send email success"))
     .catch((error) => {
       console.log(error.message);
     });
+
   res.status(200).json({
     message: "A message has been sent to this email. Check your mail.",
   });

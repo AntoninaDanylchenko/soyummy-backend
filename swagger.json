@@ -94,7 +94,6 @@
         "tags": ["Auth"],
         "summary": "User login",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Login object",
           "required": true,
@@ -159,6 +158,7 @@
     "/auth/logout": {
       "post": {
         "tags": ["Auth"],
+
         "summary": "Users` logout",
         "parameters": [],
         "security": [{ "Bearer": [] }],
@@ -224,7 +224,7 @@
     "/recipes/category-list": {
       "get": {
         "tags": ["Recipes"],
-
+        "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -247,6 +247,7 @@
     "/recipes/main-page": {
       "get": {
         "tags": ["Recipes"],
+        "security": [{ "Bearer": [] }],
         "summary": "Find 4 recipes in 4 categories (Breakfast, Miscellaneous, Chicken, Dessert)",
         "responses": {
           "200": {
@@ -270,6 +271,7 @@
     "/recipes/{category}": {
       "get": {
         "tags": ["Recipes"],
+        "security": [{ "Bearer": [] }],
         "summary": "Receiving 8 recipes of the selected category",
         "parameters": [
           {
@@ -317,6 +319,7 @@
     "/recipes/id/{id}": {
       "get": {
         "tags": ["Recipes"],
+        "security": [{ "Bearer": [] }],
         "summary": "Find recipe by ID",
         "parameters": [
           {
@@ -355,6 +358,7 @@
     "/ingredients/list": {
       "get": {
         "tags": ["Ingredients"],
+        "security": [{ "Bearer": [] }],
         "summary": "Find list of ingredients",
         "parameters": [],
         "responses": {
@@ -378,6 +382,7 @@
     "/ingredients": {
       "get": {
         "tags": ["Ingredients"],
+        "security": [{ "Bearer": [] }],
         "summary": "Find recipes for search ingredient",
         "parameters": [
           {
@@ -478,6 +483,7 @@
     "/popular-recipe": {
       "get": {
         "tags": ["Popular recipes"],
+        "security": [{ "Bearer": [] }],
         "summary": "Find popular recippes",
         "parameters": [
           {
@@ -509,6 +515,7 @@
     "/search": {
       "get": {
         "tags": ["Recipes"],
+        "security": [{ "Bearer": [] }],
         "summary": "Find recipes for title",
         "parameters": [
           {
@@ -568,6 +575,7 @@
     "/subscribe": {
       "post": {
         "tags": ["Subscribe"],
+        "security": [{ "Bearer": [] }],
         "summary": "",
         "parameters": [],
 
