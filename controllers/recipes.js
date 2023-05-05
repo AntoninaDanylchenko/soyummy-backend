@@ -27,29 +27,40 @@ let getCategoryList = async (req, res, next) => {
 
 getCategoryList = wrapper(getCategoryList);
 
+// let getOneCategory = async (req, res, next) => {
+//   const { page, limit } = req.query;
+//   const { category } = req.params;
+
+//   const paginationPage = +page || 1;
+//   const paginationLimit = +limit || 8;
+//   const skip = (paginationPage - 1) * paginationLimit;
+
+//   const recipesList = await Recipe.find({ category })
+//     .skip(skip)
+//     .limit(paginationLimit);
+
+//   if (!recipesList) {
+//     throw new HttpError(404, "Not recipes found");
+//   }
+
+//   const recipeCount = await Recipe.find({ category }).count();
+
+//   if (!recipeCount) {
+//     throw new HttpError(404, "Not recipes count found");
+//   }
+
+//   res.status(200).json({ total: recipeCount, recipesList });
+// };
 let getOneCategory = async (req, res, next) => {
-  const { page, limit } = req.query;
   const { category } = req.params;
 
-  const paginationPage = +page || 1;
-  const paginationLimit = +limit || 8;
-  const skip = (paginationPage - 1) * paginationLimit;
-
-  const recipesList = await Recipe.find({ category })
-    .skip(skip)
-    .limit(paginationLimit);
+  const recipesList = await Recipe.find({ category });
 
   if (!recipesList) {
     throw new HttpError(404, "Not recipes found");
   }
 
-  const recipeCount = await Recipe.find({ category }).count();
-
-  if (!recipeCount) {
-    throw new HttpError(404, "Not recipes count found");
-  }
-
-  res.status(200).json({ total: recipeCount, recipesList });
+  res.status(200).json({ recipesList });
 };
 
 getOneCategory = wrapper(getOneCategory);
