@@ -2,6 +2,7 @@ const { wrapper } = require("../middlewares/wrapper");
 
 const { User } = require("../models/User");
 const { Recipe } = require("../models/Recipe");
+const { HttpError } = require("../utils/HttpError");
 
 let addFavorite = async (req, res, next) => {
   const user = req.user;
@@ -35,6 +36,10 @@ let getFavorite = async (req, res, next) => {
     }, // and return only fields below
     { title: 1, description: 1, preview: 1, time: 1 }
   );
+
+  if (!fav) {
+    throw new HttpError(404, "Not found");
+  }
 
   res.status(200).json({
     data: fav,
