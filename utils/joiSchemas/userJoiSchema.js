@@ -2,10 +2,10 @@ const Joi = require("joi");
 
 const { ObjectId } = require("mongoose").Types;
 
-const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,128}$/;
+const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/;
 
 const joiRegisterSchema = Joi.object({
-  username: Joi.string().min(2).max(32).required(),
+  username: Joi.string().min(1).max(16).required(),
   password: Joi.string()
     .pattern(passwordPattern)
     .messages({
@@ -51,7 +51,7 @@ const joiShoppingList = Joi.object({
 });
 
 const joiUserSchema = Joi.object({
-  username: Joi.string().min(2).max(32),
+  username: Joi.string().min(1).max(16),
   avatarURL: Joi.string(),
 });
 

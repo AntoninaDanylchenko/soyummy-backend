@@ -5,26 +5,32 @@ const { Recipe } = require("../models/Recipe");
 const { HttpError } = require("../utils/HttpError");
 
 let addFavorite = async (req, res, next) => {
-  const user = req.user;
-  const { recipeId } = req.body;
+    const user = req.user;
+    const { recipeId } = req.body;
 
-  const recipe = await Recipe.findById(recipeId, {});
-  if (!recipe) {
-    res.status(404).json({ message: `Recipe with ID ${recipeId} not found.` });
-    return;
-  }
+    const recipe = await Recipe.findById(recipeId, {});
+    if (!recipe) {
+        res.status(404).json({ message: `Recipe with ID ${recipeId} not found.` });
+        return;
+    }
+    if (user._id === recipe.owner) {
+        res.status(409).json({ message: 'You cannot add own recipe to your favorites' });
+        return;
+    }
 
-  await User.findOneAndUpdate(
-    // this is method MongoDB
-    { _id: user._id }, // search condition
-    { $addToSet: { favoriteRecipes: recipeId } } //  in field favoriteRecipes add element recipeId
-  );
-  res.status(201).json(recipe);
-};
+    await User.findOneAndUpdate(
+        // this is method MongoDB
+        { _id: user._id }, // search condition
+        { $addToSet: { favoriteRecipes: recipeId } } //  in field favoriteRecipes add element recipeId
+    );
+    res.status(201).json(recipe);
+}
+
 
 addFavorite = wrapper(addFavorite);
 
 let getFavorite = async (req, res, next) => {
+
   const user = req.user;
   const listFav = user.favoriteRecipes;
   const fav = await Recipe.find(
@@ -44,23 +50,24 @@ let getFavorite = async (req, res, next) => {
   res.status(200).json({
     data: fav,
   });
+
 };
 
 getFavorite = wrapper(getFavorite);
 
 let deleteFavorite = async (req, res, next) => {
-  const user = req.user;
-  const { recipeId } = req.body;
+    const user = req.user;
+    const { recipeId } = req.body;
 
-  await User.findOneAndUpdate(
-    { _id: user._id },
-    { $pull: { favoriteRecipes: recipeId } } // method pull works like delete
-  );
+    await User.findOneAndUpdate(
+        { _id: user._id },
+        { $pull: { favoriteRecipes: recipeId } } // method pull works like delete
+    );
 
-  // user.favoriteRecipes = user.favoriteRecipes.filter((_id) => _id !== recipeId);
-  // await user.save();
+    // user.favoriteRecipes = user.favoriteRecipes.filter((_id) => _id !== recipeId);
+    // await user.save();
 
-  res.status(204).json();
+    res.status(204).json();
 };
 deleteFavorite = wrapper(deleteFavorite);
 

@@ -14,25 +14,20 @@ const subsribeMail = async (req, res) => {
     path.join(__dirname, "..", "/", "template", "tplMail.pug")
   );
 
-  console.log(email);
-
   const emailTpl = {
     to: email,
     from: SENGRID_EMAIL_FROM,
-    cc: "antonina.ivanets@ukr.net",
     subject:
       "Thank you for your subscription to the news So Yummy. Be the first to receive the newest recipes!",
     html: html,
     text: convert(html),
   };
-
   await sgMail
     .send(emailTpl)
     .then(() => console.log("send email success"))
     .catch((error) => {
       console.log(error.message);
     });
-
   res.status(200).json({
     message: "A message has been sent to this email. Check your mail.",
   });
