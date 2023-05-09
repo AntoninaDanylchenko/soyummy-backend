@@ -73,6 +73,7 @@ let getCurrentUser = async (req, res) => {
     username: user.username,
     email: user.email,
     avatarURL: user.avatarURL,
+    token: user.accessToken,
   };
   res.status(200).json({ resUser });
 };
