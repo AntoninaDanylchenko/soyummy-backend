@@ -53,7 +53,7 @@ let createRecipeController = async (req, res, next) => {
 
   const created = await Recipe.create(newRecipe);
   if (!created) {
-    throw new HttpError("Error create recipe");
+    throw new HttpError(400, "Error create recipe");
   }
 
   res.status(201).json(created);
