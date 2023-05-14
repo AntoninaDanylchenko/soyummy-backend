@@ -17,7 +17,7 @@ const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 const corsOptions = {
-  origin: "https://antoninadanylchenko.github.io/so-yummy",
+  headers: "*",
 };
 
 app.use(logger(formatsLogger));
