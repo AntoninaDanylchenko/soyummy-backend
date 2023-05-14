@@ -16,8 +16,12 @@ const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+const corsOptions = {
+  origin: "https://antoninadanylchenko.github.io/so-yummy",
+};
+
 app.use(logger(formatsLogger));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/", rootRouter);
